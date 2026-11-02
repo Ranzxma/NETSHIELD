@@ -1,4 +1,18 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NETSHIELD — Cybersecurity Survival</title>
 
+<style>
+:root {
+  --bg:#070b14;
+  --panel:#0e1728;
+  --line:#203653;
+  --blue:#36a9ff;
+  --cyan:#5ce1e6;
+  --text:#edf6ff;
   --muted:#91a6bd;
   --red:#ff5f72;
   --green:#52dfa0;
@@ -1010,6 +1024,76 @@ footer {
   .gallery-grid{gap:9px}
   .gallery-tools{gap:6px;margin:12px 0}
   .gallery-card{padding:9px}
+}
+
+
+
+/* V16 FIX: Homepage Cards dropdown remains visible and tappable on phones.
+   Avoid horizontal-nav overflow clipping and keep the sticky header above content. */
+@media(max-width:600px){
+  body:not(:has(#playerScreen.active)) header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    overflow:visible;
+  }
+  body:not(:has(#playerScreen.active)) .main-nav{
+    display:flex;
+    width:100%;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:4px;
+    overflow:visible;
+    white-space:normal;
+    padding:2px 0 4px;
+    position:relative;
+    z-index:1001;
+  }
+  body:not(:has(#playerScreen.active)) .main-nav .nav-link,
+  body:not(:has(#playerScreen.active)) .main-nav>.secondary{
+    flex:0 0 auto;
+    white-space:nowrap;
+    position:relative;
+  }
+  body:not(:has(#playerScreen.active)) #cardsDropdown{
+    position:relative;
+    z-index:1003;
+  }
+  body:not(:has(#playerScreen.active)) #cardsDropdown.open{
+    z-index:1004;
+  }
+  body:not(:has(#playerScreen.active)) #cardsDropdown .dropdown-menu{
+    display:none;
+    position:absolute;
+    top:calc(100% + 5px);
+    left:0;
+    right:auto;
+    z-index:1005;
+    min-width:195px;
+    width:max-content;
+    max-width:calc(100vw - 20px);
+    max-height:60vh;
+    overflow-x:hidden;
+    overflow-y:auto;
+    padding:8px;
+    background:#0c1728;
+    border:1px solid #5ce1e6;
+    border-radius:12px;
+    box-shadow:0 16px 42px #000d;
+    touch-action:pan-y;
+    -webkit-overflow-scrolling:touch;
+  }
+  body:not(:has(#playerScreen.active)) #cardsDropdown.open .dropdown-menu{
+    display:block;
+  }
+  body:not(:has(#playerScreen.active)) #cardsDropdown .dropdown-menu button{
+    display:block;
+    width:100%;
+    min-height:42px;
+    padding:11px 12px;
+    text-align:left;
+    touch-action:manipulation;
+  }
 }
 
 </style>
@@ -2159,37 +2243,21 @@ function closeCardsMenu(){
 }
 
 function toggleCardsMenu(event){
+  event.preventDefault();
   event.stopPropagation();
   const dropdown=$("cardsDropdown");
   const menu=getCardsMenuElement();
   const trigger=event.currentTarget||dropdown?.querySelector("button.nav-link");
   if(!dropdown||!menu||!trigger)return;
 
-  if(window.matchMedia("(max-width: 700px)").matches){
-    dropdown.classList.remove("open");
-    if(menu.parentElement!==document.body)document.body.appendChild(menu);
-    menu.classList.add("cards-menu-portal");
-    const isOpening=!menu.classList.contains("is-open");
-    if(!isOpening){
-      closeCardsMenu();
-      return;
-    }
-    menu.classList.add("is-open");
-    const anchor=trigger.getBoundingClientRect();
-    const menuWidth=Math.min(230,window.innerWidth-16);
-    menu.style.width=menuWidth+"px";
-    menu.style.left=Math.max(8,Math.min(anchor.left,window.innerWidth-menuWidth-8))+"px";
-    menu.style.maxHeight=Math.max(120,window.innerHeight-24)+"px";
-    const menuHeight=Math.min(menu.scrollHeight,window.innerHeight-24);
-    let top=anchor.bottom+6;
-    if(top+menuHeight>window.innerHeight-8)top=Math.max(8,anchor.top-menuHeight-6);
-    menu.style.top=top+"px";
+  // Keep the menu inside the header on every screen size. Mobile navigation
+  // now wraps instead of horizontally scrolling, so the dropdown is not clipped.
+  if(menu.parentElement!==dropdown)restoreCardsMenuInline();
+  const opening=!dropdown.classList.contains("open");
+  closeCardsMenu();
+  if(opening){
+    dropdown.classList.add("open");
     trigger.setAttribute("aria-expanded","true");
-  }else{
-    if(menu.classList.contains("cards-menu-portal"))restoreCardsMenuInline();
-    const opening=!dropdown.classList.contains("open");
-    dropdown.classList.toggle("open",opening);
-    trigger.setAttribute("aria-expanded",String(opening));
   }
 }
 
