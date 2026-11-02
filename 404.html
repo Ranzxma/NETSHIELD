@@ -1,0 +1,3264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NETSHIELD — Cybersecurity Survival</title>
+
+<style>
+:root {
+  --bg:#070b14;
+  --panel:#0e1728;
+  --line:#203653;
+  --blue:#36a9ff;
+  --cyan:#5ce1e6;
+  --text:#edf6ff;
+  --muted:#91a6bd;
+  --red:#ff5f72;
+  --green:#52dfa0;
+  --yellow:#ffd166;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:radial-gradient(circle at 80% 0%,#102b4a 0,#070b14 38%);
+  color:var(--text);
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  min-height:100vh;
+}
+
+button,input,select { font:inherit; }
+
+button {
+  cursor:pointer;
+  border:0;
+  border-radius:10px;
+  padding:11px 15px;
+  font-weight:700;
+  transition:.15s;
+}
+
+button:hover { filter:brightness(1.12); transform:translateY(-1px); }
+button:disabled { opacity:.45; cursor:not-allowed; }
+
+.primary {
+  background:linear-gradient(135deg,#168be5,#36c6e8);
+  color:#03111e;
+}
+
+.secondary {
+  background:#1a2c45;
+  color:var(--text);
+  border:1px solid #315071;
+}
+
+.danger {
+  background:#48202c;
+  color:#ffb5bf;
+  border:1px solid #803344;
+}
+
+.success {
+  background:#123b35;
+  color:#a7f5d5;
+  border:1px solid #236b5b;
+}
+
+.main-nav {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.nav-link {
+  background:transparent;
+  color:#b9cde1;
+  padding:9px 11px;
+  border:1px solid transparent;
+  font-size:12px;
+}
+
+.nav-link:hover,.nav-link.active {
+  color:var(--cyan);
+  border-color:#245477;
+  background:#10243a;
+}
+
+.dropdown { position:relative; }
+
+.dropdown-menu {
+  display:none;
+  position:absolute;
+  top:100%;
+  left:0;
+  min-width:190px;
+  padding:8px;
+  background:#0c1728;
+  border:1px solid #315071;
+  border-radius:12px;
+  box-shadow:0 14px 35px #0009;
+  z-index:30;
+}
+
+.dropdown.open .dropdown-menu { display:block; }
+
+.dropdown-menu button {
+  display:block;
+  width:100%;
+  text-align:left;
+  background:transparent;
+  color:#d9eaff;
+  padding:10px;
+  margin:0;
+  font-size:12px;
+}
+
+.dropdown-menu button:hover {
+  background:#17314d;
+  color:var(--cyan);
+}
+
+.gallery-tools {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:18px 0;
+}
+
+.filter-btn {
+  background:#13243a;
+  color:#b8d4ed;
+  border:1px solid #2c4d6c;
+}
+
+.filter-btn.active {
+  background:#123e5b;
+  color:#7eeaff;
+  border-color:#269ed2;
+}
+
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+}
+
+.gallery-card {
+  padding:12px;
+  background:#0e1b2d;
+  border:1px solid #24415f;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.gallery-card img {
+  display:block;
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:contain;
+  background:#07111e;
+  border-radius:9px;
+}
+
+.gallery-card h3 {
+  font-size:13px;
+  margin:10px 2px 4px;
+}
+
+.gallery-card p {
+  font-size:11px;
+  color:var(--muted);
+  margin:0 2px;
+}
+
+.character-art {
+  width:100%;
+  height:190px;
+  object-fit:contain;
+  object-position:center bottom;
+  margin-bottom:10px;
+}
+
+.skill-list {
+  font-size:11px;
+  color:#b8d4ed;
+  line-height:1.7;
+  margin:8px 0 0;
+  padding-left:17px;
+}
+
+.skill-action {
+  width:100%;
+  margin-top:10px;
+  background:#174b3d;
+  color:#a7f5d5;
+  border:1px solid #2b8b6d;
+}
+
+header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px clamp(16px,4vw,54px);
+  border-bottom:1px solid #20334c;
+  background:#080f1bcc;
+  position:sticky;
+  top:0;
+  z-index:5;
+  backdrop-filter:blur(14px);
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.brand img {
+  width:42px;
+  height:42px;
+  object-fit:contain;
+}
+
+.brand small {
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:3px;
+  margin-top:3px;
+}
+
+main {
+  max-width:1200px;
+  margin:auto;
+  padding:34px clamp(16px,4vw,48px) 70px;
+}
+
+.eyebrow {
+  color:var(--cyan);
+  font-size:11px;
+  letter-spacing:3px;
+  font-weight:800;
+}
+
+h1 {
+  font-size:clamp(32px,5vw,58px);
+  line-height:1.02;
+  margin:12px 0;
+}
+
+h1 span { color:var(--blue); }
+
+.lead {
+  color:var(--muted);
+  max-width:660px;
+  line-height:1.65;
+}
+
+.screen { display:none; }
+.screen.active { display:block; }
+
+.hero {
+  padding:clamp(24px,5vw,54px);
+  border:1px solid #24415f;
+  border-radius:24px;
+  background:linear-gradient(120deg,#10223aee,#0b1424ee);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after {
+  content:"";
+  position:absolute;
+  width:300px;
+  height:300px;
+  border:1px solid #36a9ff22;
+  border-radius:50%;
+  right:-90px;
+  top:-100px;
+  box-shadow:0 0 0 35px #36a9ff09,0 0 0 70px #36a9ff06;
+  pointer-events:none;
+}
+
+.hero-actions {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:26px;
+  position:relative;
+  z-index:1;
+}
+
+.section-title {
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:12px;
+  margin:28px 0 14px;
+}
+
+.section-title h2 { margin:0; font-size:20px; }
+.muted { color:var(--muted); }
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+}
+
+.card,.panel {
+  background:linear-gradient(145deg,#101c2e,#0c1524);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:17px;
+}
+
+.character {
+  min-height:155px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.char-name { font-weight:900; letter-spacing:1px; }
+.char-role { color:var(--muted); font-size:12px; margin-top:4px; }
+
+.layout {
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:16px;
+}
+
+.panel h2,.panel h3 { margin:0 0 15px; }
+
+label {
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin:12px 0 6px;
+}
+
+input,select {
+  width:100%;
+  padding:11px 12px;
+  color:var(--text);
+  background:#081221;
+  border:1px solid #2b4564;
+  border-radius:9px;
+  outline:none;
+}
+
+input:focus,select:focus { border-color:var(--blue); }
+
+.row {
+  display:flex;
+  gap:9px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.row>* { flex:1; }
+
+.stat-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.stat {
+  background:#0b1627;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+}
+
+.stat strong {
+  display:block;
+  font-size:25px;
+  margin-top:6px;
+}
+
+.stat small { color:var(--muted); }
+
+.player-card {
+  border:1px solid var(--line);
+  background:#0c1728;
+  border-radius:14px;
+  padding:15px;
+}
+
+.player-head {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+
+.hp-number { font-size:24px; font-weight:900; }
+
+.hp-track {
+  height:10px;
+  background:#26354a;
+  border-radius:99px;
+  overflow:hidden;
+  margin:12px 0;
+}
+
+.hp-fill {
+  height:100%;
+  background:linear-gradient(90deg,#20b8da,#54e2aa);
+  border-radius:99px;
+  transition:width .25s;
+}
+
+.hp-fill.low {
+  background:linear-gradient(90deg,#ff9b54,#ff536c);
+}
+
+.inventory {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:12px;
+}
+
+.tag {
+  font-size:11px;
+  padding:6px 8px;
+  border-radius:8px;
+  background:#142b45;
+  border:1px solid #285477;
+  color:#bde7ff;
+}
+
+.tag.special {
+  background:#3b3018;
+  border-color:#806529;
+  color:#ffe3a0;
+}
+
+.log {
+  max-height:230px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.log-item {
+  font-size:12px;
+  color:#c4d5e7;
+  padding:9px 10px;
+  background:#0a1422;
+  border-left:2px solid #2a91d2;
+  border-radius:5px;
+}
+
+.hidden { display:none!important; }
+
+.modal-backdrop {
+  position:fixed;
+  inset:0;
+  background:#02060dcc;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:20;
+}
+
+.modal-backdrop.show { display:flex; }
+
+.modal {
+  width:min(520px,100%);
+  background:#101d30;
+  border:1px solid #315273;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 20px 80px #0009;
+}
+
+.modal h2 { margin:0 0 8px; }
+.modal p { color:var(--muted); line-height:1.5; }
+
+.card-reveal {
+  border:1px solid #3479a9;
+  background:linear-gradient(145deg,#102e4a,#111a2a);
+  border-radius:14px;
+  padding:20px;
+  margin:14px 0;
+}
+
+.card-reveal .kind {
+  color:var(--cyan);
+  font-size:11px;
+  letter-spacing:2px;
+  font-weight:900;
+}
+
+.card-reveal h3 { font-size:25px; margin:10px 0; }
+
+.notice {
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.55;
+  padding:12px;
+  border:1px dashed #315071;
+  border-radius:10px;
+  margin-top:15px;
+}
+
+footer {
+  text-align:center;
+  color:#637b95;
+  font-size:11px;
+  padding:24px;
+  border-top:1px solid #172b42;
+}
+
+@media(max-width:850px) {
+  .grid { grid-template-columns:repeat(2,1fr); }
+  .gallery-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .layout { grid-template-columns:1fr; }
+  .stat-grid { grid-template-columns:repeat(2,1fr); }
+}
+
+@media(max-width:520px) {
+  header {
+    padding:14px;
+    align-items:flex-start;
+    gap:10px;
+    flex-direction:column;
+  }
+  .main-nav { width:100%; }
+  .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .grid { grid-template-columns:repeat(2,1fr); }
+  .hero { padding:24px; }
+}
+
+
+/* NETSHIELD MULTIPLAYER ADDITIONS */
+.statusbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 18px}
+.pill{font-size:11px;border:1px solid #315071;border-radius:99px;padding:7px 11px;color:#bde7ff;background:#10243a}
+.pill.live{border-color:#236b5b;color:#a7f5d5;background:#123b35}
+.pill.warn{border-color:#806529;color:#ffe3a0;background:#3b3018}
+.character-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px}
+.character-option{cursor:pointer;text-align:left;width:100%;color:var(--text);background:#0e1b2d;border:1px solid #24415f;border-radius:14px;padding:12px}
+.character-option.selected{border:2px solid var(--cyan);background:#12304a;box-shadow:0 0 18px #36a9ff22}
+.character-option:disabled{opacity:.38;cursor:not-allowed}
+.character-option img{width:100%;height:145px;object-fit:contain;display:block}
+.character-option .role{font-size:11px;color:var(--muted);margin-top:4px}
+.character-option .skills{font-size:11px;line-height:1.5;color:#bde7ff;margin-top:9px}
+.selected-character{margin-top:12px;color:var(--cyan);font-size:12px;font-weight:800}
+.connection-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:#0b1627;border:1px solid var(--line);border-radius:14px;padding:14px}
+.stat strong{display:block;font-size:25px;margin-top:6px}
+.stat small{color:var(--muted)}
+.inventory{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.inventory-item{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:center;background:#142b45;border:1px solid #285477;color:#bde7ff;border-radius:10px;padding:8px;font-size:11px}
+.inventory-item.special{background:#3b3018;border-color:#806529;color:#ffe3a0}
+.inventory-item img{width:62px;height:82px;object-fit:contain;background:#07111e;border-radius:6px}
+.inventory-item p{margin:4px 0;color:var(--muted);line-height:1.45}
+.inventory-item button{padding:7px 10px;font-size:10px;margin-top:5px}
+.card-display{display:grid;grid-template-columns:minmax(110px,180px) 1fr;gap:14px;align-items:start;background:#0b1728;border:1px solid #315273;border-radius:14px;padding:13px;margin:12px 0}
+.card-display img{width:100%;max-height:260px;object-fit:contain;background:#07111e;border-radius:8px}
+.card-display h3{margin:4px 0 8px}
+.card-display p{font-size:12px;color:var(--muted);line-height:1.5}
+.card-display .damage{font-size:20px;color:#ff9eaa;font-weight:900}
+.defense-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.defense-choice button{display:grid;grid-template-columns:64px 1fr;gap:9px;align-items:center;text-align:left;background:#0e1b2d;border:1px solid #315071;color:var(--text);padding:9px}
+.defense-choice button.selected{border:2px solid var(--cyan);background:#12304a}
+.defense-choice img{width:64px;height:84px;object-fit:contain;background:#07111e;border-radius:6px}
+.defense-choice strong{font-size:11px}
+.defense-choice small{display:block;color:var(--muted);font-size:10px;line-height:1.4;margin-top:5px}
+.pending-box{background:#2a1b24;border:1px solid #804253;border-radius:13px;padding:13px;margin-top:12px}
+.pending-box h3{margin:0 0 8px}
+.action-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.action-buttons button{flex:1;min-width:120px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:50;max-width:min(92vw,540px);padding:12px 16px;border-radius:12px;background:#102b43;border:1px solid #3479a9;color:#eaf7ff;box-shadow:0 12px 36px #0008;font-size:13px}
+.toast.error{background:#321923;border-color:#9b4153;color:#ffc1ca}
+.toast.success{background:#123b35;border-color:#236b5b;color:#a7f5d5}
+.finish-banner{border:1px solid #96752d;background:linear-gradient(140deg,#302814,#151b27);padding:18px;border-radius:15px;margin:12px 0}
+.finish-banner h2{color:#ffe29a;margin:0 0 7px}
+.code-display{font-size:32px;font-weight:900;letter-spacing:6px;color:var(--cyan)}
+@media(max-width:850px){.character-picker{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.card-display{grid-template-columns:110px 1fr}.card-display img{max-height:180px}.defense-choice{grid-template-columns:1fr}.character-option img{height:125px}}
+
+
+/* AUTOMATIC THREAT-DEFENSE RESULT */
+.notice.action-good{background:#123b35;border-color:#236b5b;color:#a7f5d5}
+.notice.action-bad{background:#321923;border-color:#803344;color:#ffc1ca}
+
+/* TURN MANAGEMENT + SPECIAL NOTIFICATIONS */
+.turn-active{border:1px solid #2b8b6d!important;background:#123b35!important;color:#a7f5d5!important}
+.turn-waiting{border:1px solid #315071!important;background:#14243a!important;color:#b9cde1!important}
+.turn-banner{padding:11px 13px;border-radius:10px;margin:12px 0;font-size:12px;line-height:1.5;border:1px solid #315071;background:#10243a;color:#bde7ff}
+.turn-banner.active{border-color:#236b5b;background:#123b35;color:#a7f5d5}
+.special-notification{padding:10px 12px;border:1px solid #806529;border-left:3px solid #ffd166;background:#302814;border-radius:9px;margin-bottom:8px;font-size:12px;line-height:1.5;color:#ffe3a0}
+.special-notification small{display:block;color:#c6b27f;font-size:10px;margin-bottom:3px}
+/* SMALL FLOATING ADMIN SPECIAL-CARD TOAST */
+.admin-special-toast{
+  position:fixed;
+  top:14px;
+  left:50%;
+  z-index:120;
+  width:max-content;
+  max-width:min(92vw,440px);
+  padding:10px 15px;
+  border:1px solid #3479a9;
+  border-left:3px solid var(--cyan);
+  border-radius:11px;
+  background:#10243aee;
+  color:#eaf7ff;
+  box-shadow:0 8px 25px #0005;
+  font-size:12px;
+  line-height:1.45;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,-18px);
+  transition:opacity .25s ease,transform .25s ease;
+}
+.admin-special-toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+.admin-special-toast strong{color:#7eeaff}
+
+.permanent-tag{display:inline-block;font-size:10px;border:1px solid #98752b;background:#3b3018;color:#ffe3a0;border-radius:99px;padding:4px 7px;margin-top:4px}
+
+/* GUIDEBOOK QR CODE */
+.guidebook-panel{
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 210px;
+  align-items:center;
+  gap:24px;
+}
+.guidebook-panel h2{
+  margin:9px 0;
+  color:var(--text);
+}
+.guidebook-panel p{
+  margin:8px 0;
+}
+.guidebook-qr-wrap{
+  width:100%;
+  max-width:210px;
+  justify-self:center;
+  padding:9px;
+  background:#ffffff;
+  border:1px solid #d7e4ef;
+  border-radius:16px;
+  box-shadow:0 10px 30px #0005;
+}
+.guidebook-qr{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:1/1;
+  object-fit:contain;
+  border-radius:8px;
+}
+@media(max-width:600px){
+  .guidebook-panel{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+  .guidebook-qr-wrap{
+    max-width:205px;
+  }
+}
+
+
+/* PLAYER DASHBOARD TABS + PHONE LAYOUT */
+.player-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  padding:7px;
+  margin:14px 0;
+  border:1px solid #24415f;
+  border-radius:13px;
+  background:#091525;
+}
+.player-tab-button{
+  min-width:0;
+  padding:11px 8px;
+  color:#b9cde1;
+  background:transparent;
+  border:1px solid transparent;
+  font-size:12px;
+}
+.player-tab-button.active{
+  color:#7eeaff;
+  background:#12304a;
+  border-color:#269ed2;
+}
+.player-tab-content{display:none}
+.player-tab-content.active{display:block}
+.player-main-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:14px}
+.player-health-panel{margin-bottom:14px}
+.player-log-panel{max-height:65vh;overflow:auto}
+.player-log-panel .log-item{margin-bottom:8px}
+
+/* HOMEPAGE CARD BACK-COVER PREVIEWS */
+.home-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.home-card-preview{cursor:pointer;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.home-card-preview:hover{transform:translateY(-4px);border-color:#269ed2;box-shadow:0 10px 28px #0005}
+.home-card-preview img{display:block;width:100%;max-width:230px;aspect-ratio:3/4;object-fit:contain;margin:0 auto 14px;border-radius:10px;background:#07111e}
+.home-card-preview h3{margin:0 0 7px;text-align:center}
+.home-card-preview p{margin:0;text-align:center}
+
+/* ASSET ERROR FALLBACK: shows the exact path when an image file is missing */
+.image-missing-box{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:12px;text-align:center;color:#ffcf8b;background:repeating-linear-gradient(135deg,#17283b,#17283b 9px,#122033 9px,#122033 18px);border:1px dashed #bd8750;border-radius:9px;min-width:0;overflow:hidden}
+.image-missing-box strong{font-size:11px;letter-spacing:.6px}
+.image-missing-box small{font-size:9px;line-height:1.35;color:#c3ad91;overflow-wrap:anywhere}
+.gallery-card .image-missing-box{width:100%;aspect-ratio:3/4}
+.character-option .image-missing-box{width:100%;height:145px;margin-bottom:4px}
+.character-art.image-missing-box{height:190px;width:100%;margin-bottom:10px}
+.inventory-item .image-missing-box{width:62px;height:82px;padding:4px}
+.card-display .image-missing-box{width:100%;min-height:150px}
+.home-card-preview .image-missing-box{width:100%;max-width:230px;aspect-ratio:3/4;margin:0 auto 14px}
+.brand .image-missing-box{width:42px;height:42px;padding:2px}
+@media(max-width:600px){.character-option .image-missing-box{height:125px}.home-card-preview .image-missing-box{max-width:190px}}
+
+/* ROUTE / ADMIN PLAYER MANAGEMENT / HEALTH ALIGNMENT */
+.player-health-panel .player-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px}
+.player-health-panel .hp-number{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;min-width:88px;flex-shrink:0}
+.manage-player-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px}
+.manage-player-actions button{min-width:0;padding:8px 5px;font-size:10px;line-height:1.25}
+.manage-player-route{font-size:11px;color:#9ddcf5;margin-top:7px;line-height:1.5}
+.route-status{padding:10px 12px;border:1px solid #315071;background:#10243a;color:#bde7ff;border-radius:10px;margin:10px 0;font-size:12px;line-height:1.5}
+.route-choice-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:7px}
+@media(max-width:600px){.manage-player-actions button{font-size:9px;padding:8px 3px}.player-health-panel .hp-number{font-size:22px;min-width:78px}}
+
+/* WEBSITE MODE DIGITAL DICE */
+.dice-panel{margin-top:12px;border:1px solid #285477;background:linear-gradient(145deg,#10243a,#0b1728);border-radius:14px;padding:14px}
+.dice-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.dice-result{display:flex;align-items:center;gap:14px;justify-content:center;padding:13px 8px}
+.dice-face{width:76px;height:76px;display:grid;place-items:center;border-radius:17px;border:2px solid #5ce1e6;background:linear-gradient(145deg,#174d78,#0e2741);color:#effcff;font-size:56px;line-height:1;box-shadow:0 8px 24px #0005,0 0 18px #36a9ff22}
+.dice-face.rolling{animation:diceRoll .65s ease}
+.dice-number{font-size:38px;font-weight:900;color:var(--cyan);line-height:1}
+.dice-meta{font-size:11px;color:var(--muted);line-height:1.5;text-align:center}
+.dice-empty{color:var(--muted);font-size:12px;text-align:center;padding:17px 8px}
+@keyframes diceRoll{0%{transform:rotate(0) scale(1)}20%{transform:rotate(-16deg) scale(1.08)}45%{transform:rotate(14deg) scale(.94)}70%{transform:rotate(-8deg) scale(1.04)}100%{transform:rotate(0) scale(1)}}
+@media(max-width:700px){.home-card-grid{grid-template-columns:1fr}.home-card-preview img{max-width:190px}.dice-face{width:66px;height:66px;font-size:48px}.dice-number{font-size:32px}}
+
+@media(max-width:600px){
+  header{padding:9px 10px;gap:6px;align-items:flex-start}
+  .brand{gap:7px;font-size:14px;letter-spacing:1px}
+  .brand img{width:29px;height:29px}
+  .brand small{font-size:7px;letter-spacing:1.5px;margin-top:1px}
+  .main-nav{width:100%;flex-wrap:nowrap;gap:2px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding-bottom:3px;scrollbar-width:none}
+  .main-nav::-webkit-scrollbar{display:none}
+  .nav-link{flex:0 0 auto;font-size:10px;padding:6px 7px;white-space:nowrap}
+  .main-nav>.secondary{flex:0 0 auto;font-size:10px;padding:6px 8px;white-space:nowrap}
+  main{padding:17px 12px 45px}
+  #playerScreen>.row{align-items:flex-start;gap:8px}
+  #playerScreen h1{font-size:clamp(22px,7vw,30px);margin:7px 0}
+  #playerExitButton{font-size:9px;padding:7px 8px;max-width:118px;line-height:1.25}
+  .player-tabs{position:sticky;top:0;z-index:4;margin:12px 0 10px;gap:4px;padding:5px}
+  .player-tab-button{font-size:11px;padding:10px 4px}
+  .player-main-grid{grid-template-columns:1fr;gap:10px}
+  .player-health-panel{margin-bottom:0}
+  .player-health-panel .panel{padding:13px}
+  .player-log-panel{max-height:none}
+  #playerThreatArea .card-display{grid-template-columns:100px minmax(0,1fr);gap:10px;padding:9px}
+  #playerThreatArea .card-display img{max-height:155px}
+  #playerThreatArea .card-display h3{font-size:17px}
+  #playerInventory .inventory-item{grid-template-columns:66px minmax(0,1fr)}
+  #playerInventory .inventory-item img{width:66px;height:88px}
+}
+
+</style>
+
+<!-- Supabase JavaScript Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <img src="logo.png" alt="NETSHIELD Logo">
+    <div>
+      NETSHIELD
+      <small>CYBERSECURITY SURVIVAL</small>
+    </div>
+  </div>
+
+  <nav class="main-nav">
+    <button class="nav-link active" onclick="showScreen('homeScreen')">Homepage</button>
+
+    <div class="dropdown" id="cardsDropdown">
+      <button class="nav-link" onclick="toggleCardsMenu(event)">Cards ▾</button>
+      <div class="dropdown-menu">
+        <button onclick="openCardGallery('All')">All Cards</button>
+        <button onclick="openCardGallery('Threat')">Threat Cards</button>
+        <button onclick="openCardGallery('Defense')">Defense Cards</button>
+        <button onclick="openCardGallery('Special')">Special Cards</button>
+      </div>
+    </div>
+
+    <button class="nav-link" onclick="showScreen('charactersScreen')">Characters</button>
+    <button class="nav-link" onclick="showScreen('howScreen')">How to Play</button>
+    <button class="nav-link" onclick="showScreen('teamScreen')">Team</button>
+    <button class="nav-link" onclick="showScreen('aboutScreen')">About</button>
+    <button class="secondary" onclick="showScreen('adminLoginScreen')">ADMIN</button>
+  </nav>
+</header>
+
+<main>
+  <div class="statusbar"><span id="connectionBadge" class="pill warn">● DATABASE NOT CONNECTED</span><span id="roomBadge" class="pill hidden"></span><span id="roleBadge" class="pill hidden"></span></div>
+
+<section id="homeScreen" class="screen active">
+    <div class="hero">
+      <div class="eyebrow">BOARD GAME COMPANION SYSTEM</div>
+      <h1>PLAY SMART.<br><span>STAY SECURE.</span></h1>
+      <p class="lead">Selamat datang di NETSHIELD: Cybersecurity Survival. Baca panduan, lihat kartu dan karakter terlebih dahulu. Website Mode menggunakan papan dan pion fisik, sementara dadu digital 1–6 serta pengelolaan kartu dan Health tersedia melalui website.</p>
+      <div class="hero-actions">
+        <button class="primary" onclick="showScreen('joinScreen')">START →</button>
+        <button class="secondary" onclick="showScreen('howScreen')">HOW TO PLAY</button>
+      </div>
+    </div>
+    <div class="section-title"><h2>MEET THE CHARACTERS</h2><button class="secondary" onclick="showScreen('charactersScreen')">VIEW ALL CHARACTERS</button></div>
+    <div class="grid" id="homeCharacters"></div>
+    <div class="section-title"><h2>EXPLORE THE CARDS</h2><span class="muted">Threat · Defense · Special</span></div>
+    <div class="grid home-card-grid">
+      <div class="card home-card-preview" onclick="openCardGallery('Threat')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCardGallery('Threat')}">
+        <img src="back cover threat.png" alt="Threat Card Back Cover" onerror="this.style.opacity='.2';this.alt='Threat card cover image not found'">
+        <h3>THREAT CARDS</h3><p class="muted">Kenali berbagai ancaman digital.</p>
+      </div>
+      <div class="card home-card-preview" onclick="openCardGallery('Defense')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCardGallery('Defense')}">
+        <img src="back cover defense.png" alt="Defense Card Back Cover" onerror="this.style.opacity='.2';this.alt='Defense card cover image not found'">
+        <h3>DEFENSE CARDS</h3><p class="muted">Pelajari cara menghadapi ancaman.</p>
+      </div>
+      <div class="card home-card-preview" onclick="openCardGallery('Special')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCardGallery('Special')}">
+        <img src="back cover special.png" alt="Special Card Back Cover" onerror="this.style.opacity='.2';this.alt='Special card cover image not found'">
+        <h3>SPECIAL CARDS</h3><p class="muted">Gunakan efek khusus dalam permainan.</p>
+      </div>
+    </div>
+  </section>
+
+<section id="cardsScreen" class="screen">
+  <div class="eyebrow">NETSHIELD COLLECTION</div>
+  <h1>CARD <span>GALLERY.</span></h1>
+  <p class="lead">Jelajahi kartu asli NETSHIELD berdasarkan kategori.</p>
+  <div class="gallery-tools" id="cardFilters"></div>
+  <div class="gallery-grid" id="cardGallery"></div>
+</section>
+
+<section id="charactersScreen" class="screen">
+  <div class="eyebrow">CHARACTER PROFILES</div>
+  <h1>CHOOSE YOUR <span>IDENTITY.</span></h1>
+  <p class="lead">Setiap karakter memiliki Character Skill untuk menangkal Threat tertentu.</p>
+  <div class="gallery-grid" id="characterGallery"></div>
+</section>
+
+<section id="howScreen" class="screen">
+    <div class="eyebrow">HOW TO PLAY</div>
+    <h1>PLAY <span>SMART.</span></h1>
+
+    <div class="panel">
+      <div class="eyebrow">WEBSITE MODE</div>
+      <h2>QUICK START GUIDE</h2>
+      <p class="lead">Website Mode menggunakan papan dan pion fisik, sedangkan dadu, kartu, Health, Inventory, giliran, dan Game Log dikelola melalui website NETSHIELD. Semua Player dalam satu kelompok wajib menggunakan mode yang sama.</p>
+      <ol class="lead" style="line-height:2;padding-left:22px">
+        <li><b>Admin Creates a Room.</b> Admin membuka menu ADMIN, memasukkan Admin PIN, lalu menekan CREATE ROOM.</li>
+        <li><b>Share the Room Code.</b> Admin membagikan kode room kepada seluruh Player dalam kelompok yang sama.</li>
+        <li><b>Join the Game.</b> Setiap Player membuka website, menekan START, memasukkan Room Code dan nama, memilih karakter yang masih tersedia, lalu memilih SAFE ROUTE atau EXPRESS ROUTE. Setiap Player baru otomatis menerima 3 Defense Card acak.</li>
+        <li><b>Prepare the Physical Board.</b> Letakkan papan dan pion. Untuk Website Mode, dadu digital tersedia di halaman MAIN Player.</li>
+        <li><b>Start the Game.</b> Setelah minimal 2 Player bergabung, Admin menekan START FIRST TURN. Urutan giliran dimulai dari Player 1.</li>
+        <li><b>Roll the Digital Dice.</b> Player yang sedang mendapat giliran menekan ROLL DICE. Website menghasilkan angka 1–6. Gambar dadu dan angka yang sama terlihat di layar Player serta Admin.</li>
+        <li><b>Move Your Pawn.</b> Pindahkan pion pada papan fisik sesuai angka yang muncul di website. Website memperbarui posisi kotak dan menjalankan efek kotak tempat Player mendarat.</li>
+        <li><b>Automatic Square Effects.</b> LEARNING memberikan 1 Defense Card acak; THREAT memberikan 1 Threat; SPECIAL memberikan 1 Special Card; SAFE tidak memiliki efek; RECOVERY menambah 15 HP; FINISH mencatat waktu urutan Player menyelesaikan rute.</li>
+        <li><b>Handle the Threat.</b> Jika mendarat di kotak Threat, kartu muncul di HP Player yang dituju. Pilih Defense Card yang tepat, Character Skill yang cocok, Security Backup jika tersedia, atau Skip Threat. Admin tidak dapat memindahkan giliran selama Threat aktif belum diselesaikan.</li>
+        <li><b>Manage Your Cards.</b> Defense Card dan Special Card tersimpan di tab INVENTORY. Health diperbarui otomatis, sedangkan aktivitas permainan tercatat di tab GAME LOG. Admin juga dapat membagikan kartu tambahan melalui tiga tombol pada profil Player di MANAGE PLAYER.</li>
+        <li><b>Admin Controls the Turn.</b> Setelah Player melempar dadu dan menyelesaikan Threat bila ada, Admin menekan END TURN · NEXT PLAYER. Player tidak memiliki tombol END TURN.</li>
+        <li><b>Finish the Game.</b> Player yang mencapai FINISH dengan 100 HP langsung menang. Jika tidak ada yang finish dengan 100 HP, semua Player menunggu sampai mencapai FINISH; Player dengan HP terbanyak menang. Jika HP sama, Player yang lebih dulu mencapai FINISH menang.</li>
+      </ol>
+      <div class="notice">PENTING: Semua Player dalam satu kelompok harus bergabung ke Room Code yang sama dan mengikuti Website Mode. Dadu digital hanya menghasilkan angka 1–6. Hasil lemparan ditampilkan di layar Player dan Admin. Papan serta pion tetap digunakan secara fisik. Admin memulai permainan dan mengatur pergantian giliran melalui tombol di GAME CONTROL. Player tidak dapat mengakhiri giliran sendiri. Efek kotak rute dijalankan otomatis ketika Player mendarat di kotak tersebut. Extra Roll memberikan satu kesempatan lemparan digital tambahan.</div>
+    </div>
+
+    <div class="panel guidebook-panel">
+      <div>
+        <div class="eyebrow">NETSHIELD FULL GUIDEBOOK</div>
+        <h2>SCAN TO READ THE FULL GUIDEBOOK</h2>
+        <p class="lead">Pindai QR Code menggunakan kamera HP untuk membuka full guidebook NETSHIELD di Canva. Panduan lengkap berisi penjelasan komponen, karakter, kartu, dan aturan permainan.</p>
+        <p class="muted" style="font-size:12px">Pastikan kamera dapat melihat seluruh QR Code dengan jelas.</p>
+      </div>
+      <div class="guidebook-qr-wrap">
+        <img class="guidebook-qr" src="guidebook-qrcode.png" alt="QR Code untuk membuka NETSHIELD Full Guidebook di Canva">
+      </div>
+    </div>
+  </section>
+
+<section id="teamScreen" class="screen">
+  <div class="eyebrow">THE TEAM</div>
+  <h1>MEET THE <span>TEAM.</span></h1>
+  <div class="panel">
+    <p class="lead">NETSHIELD: Cybersecurity Survival — Student Research Project.</p>
+    <p class="muted">Informasi anggota tim dapat ditambahkan di sini.</p>
+  </div>
+</section>
+
+<section id="aboutScreen" class="screen">
+  <div class="eyebrow">ABOUT NETSHIELD</div>
+  <h1>ONE WRONG CLICK,<br><span>YOUR DATA IS GONE!</span></h1>
+  <div class="panel">
+    <p class="lead">NETSHIELD adalah board game edukasi untuk membantu remaja mengenali ancaman keamanan digital dan mempelajari perlindungan akun serta data pribadi.</p>
+  </div>
+</section>
+
+<section id="joinScreen" class="screen">
+    <div class="eyebrow">PLAYER ACCESS</div><h1>JOIN THE <span>GAME.</span></h1>
+    <p class="lead">Masukkan kode room dan nama yang benar. Pilih satu karakter. Nomor Player akan diberikan otomatis setelah kamu menekan JOIN GAME.</p>
+    <div class="panel" style="max-width:850px">
+      <label>Kode Room dari Admin</label><input id="joinRoomCode" maxlength="6" placeholder="Contoh: A7K9Q2" autocomplete="off" style="text-transform:uppercase" onblur="loadRoomForJoin()">
+      <label>Nama / Nickname Player</label><input id="playerName" maxlength="24" placeholder="Masukkan nama atau nickname">
+      <label>Pilih Rute Permainan</label>
+      <select id="playerRoute">
+        <option value="safe">SAFE ROUTE · 31 SPACES</option>
+        <option value="express">EXPRESS ROUTE · 22 SPACES</option>
+      </select>
+      <p class="route-choice-note">Pilih rute sebelum bergabung. Pilihan rute akan dikunci setelah JOIN GAME.</p>
+      <div class="section-title"><h2>PILIH KARAKTER</h2></div>
+      <div id="characterPicker" class="character-picker"></div>
+      <div id="selectedCharacterText" class="selected-character">Belum ada karakter dipilih.</div>
+      <div class="notice">Periksa kembali nama dan karakter sebelum bergabung. Setelah JOIN GAME, nama dan karakter dikunci. Untuk keluar dari permainan, tunggu Admin menekan FINISH.</div>
+      <button class="primary" style="width:100%;margin-top:18px" onclick="joinGame()">CONFIRM & JOIN GAME</button>
+      <div id="joinError" class="notice hidden"></div>
+    </div>
+  </section>
+
+<section id="adminLoginScreen" class="screen">
+    <div class="eyebrow">RESTRICTED ACCESS</div><h1>ADMIN <span>CONTROL.</span></h1>
+    <div class="layout">
+      <div class="panel">
+        <h2>CREATE NEW GAME</h2><p class="muted">Buat room baru sebelum juri bergabung. Kode room akan muncul di dashboard Admin.</p>
+        <label>Admin PIN</label><input id="createAdminPin" type="password" placeholder="Masukkan Admin PIN">
+        <button class="primary" style="width:100%;margin-top:12px" onclick="createRoom()">CREATE ROOM</button>
+      </div>
+      <div class="panel">
+        <h2>RECONNECT ADMIN</h2><p class="muted">Gunakan bagian ini jika kamu sudah memiliki kode room.</p>
+        <label>Kode Room</label><input id="adminRoomCode" maxlength="6" placeholder="Kode room" style="text-transform:uppercase">
+        <label>Admin PIN</label><input id="loginAdminPin" type="password" placeholder="Masukkan Admin PIN">
+        <button class="secondary" style="width:100%;margin-top:12px" onclick="adminLogin()">OPEN ADMIN DASHBOARD</button>
+      </div>
+    </div>
+    <div id="loginError" class="notice hidden"></div>
+    <p class="notice">PIN pada versi demo ini hanya pengunci tampilan di browser, bukan autentikasi server yang kuat. Gunakan untuk demonstrasi sekolah dengan kode room yang dibagikan langsung.</p>
+  </section>
+
+<section id="adminScreen" class="screen">
+    <div class="row" style="justify-content:space-between">
+      <div><div class="eyebrow">CONTROL CENTER</div><h1>ADMIN <span>DASHBOARD.</span></h1></div>
+      <button class="danger" style="flex:0 0 auto" onclick="leaveSession()">LOG OUT</button>
+    </div>
+    <div class="panel">
+      <div class="row" style="align-items:center">
+        <div><div class="muted" style="font-size:11px">KODE ROOM UNTUK JURI</div><div id="adminRoomCodeDisplay" class="code-display">------</div></div>
+        <button class="secondary" style="flex:0 0 auto" onclick="copyRoomCode()">COPY CODE</button>
+      </div>
+      <p class="muted" style="font-size:12px;margin-bottom:0">Bagikan link GitHub Pages dan kode room ini kepada juri.</p>
+    </div>
+    <div class="stat-grid" id="adminStats" style="margin-top:14px"></div>
+    <div id="adminFinishedBanner" class="finish-banner hidden"></div>
+    <div class="layout" style="margin-top:16px">
+      <div class="panel"><h2>MANAGE PLAYER</h2><div id="adminPlayers" class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div></div>
+      <div class="panel">
+        <h2>GAME CONTROL</h2>
+        <div id="adminTurnStatus" class="turn-banner">Menunggu Player bergabung. Setelah semua Player siap, tekan START GAME untuk memulai urutan giliran otomatis.</div>
+        <button id="adminTurnButton" class="primary" style="width:100%;margin-top:10px" onclick="adminControlTurn()">START FIRST TURN</button>
+        <div class="dice-panel">
+          <div class="dice-panel-head"><b>LIVE DIGITAL DICE</b><span class="pill">1–6</span></div>
+          <div id="adminDiceResult" class="dice-empty">Belum ada Player yang melempar dadu.</div>
+        </div>
+        <div class="notice">Admin mengatur giliran melalui tombol di atas. Setelah Player melempar dadu dan menyelesaikan Threat, Admin menekan tombol yang sama untuk berpindah ke Player berikutnya. Kartu dari kotak rute diberikan otomatis; tombol pada setiap profil Player dapat digunakan untuk membagikan kartu tambahan.</div>
+        <h3 style="margin-top:22px">THREAT / DEFENSE STATUS</h3><div id="pendingDefenseArea" class="muted" style="font-size:12px">Website otomatis memeriksa pasangan nomor Threat dan Defense saat Player mengirim jawaban.</div>
+        <h3 style="margin-top:22px">HEALTH CONTROL</h3>
+        <label>Pilih Player</label><select id="healthTargetPlayer"></select>
+        <label>Jumlah perubahan Health (kelipatan 5)</label>
+        <select id="healthAmount"><option value="5">5 HP</option><option value="10">10 HP</option><option value="15">15 HP</option><option value="20">20 HP</option><option value="25">25 HP</option><option value="30">30 HP</option><option value="35">35 HP</option><option value="40">40 HP</option><option value="45">45 HP</option><option value="50">50 HP</option><option value="55">55 HP</option><option value="60">60 HP</option><option value="65">65 HP</option><option value="70">70 HP</option><option value="75">75 HP</option><option value="80">80 HP</option><option value="85">85 HP</option><option value="90">90 HP</option><option value="95">95 HP</option><option value="100">100 HP</option></select>
+        <div class="row" style="margin-top:9px"><button class="danger" onclick="changeHealth(-1)">REDUCE HEALTH</button><button class="success" onclick="changeHealth(1)">ADD HEALTH</button></div>
+        <h3 style="margin-top:22px">GAME RESULT</h3>
+        <div id="gameWinnerStatus" class="notice">Pemenang akan ditentukan otomatis berdasarkan posisi finish dan jumlah Health setiap Player.</div>
+        <h3 style="margin-top:22px">SPECIAL CARD USED</h3>
+        <div class="notice" style="margin-top:0">Notifikasi hanya muncul ketika Player menggunakan Special Card. Pesan singkat akan melayang di bagian atas layar Admin tanpa menutupi dashboard.</div>
+        <div class="log" id="specialNotifications"></div>
+        <h3 style="margin-top:22px">GAME LOG</h3><div class="log" id="gameLog"></div>
+      </div>
+    </div>
+  </section>
+
+<section id="playerScreen" class="screen">
+    <div class="row" style="justify-content:space-between">
+      <div><div class="eyebrow">PLAYER DASHBOARD</div><h1 id="playerTitle">WELCOME.</h1><p class="muted" id="playerRoleLine" style="margin-top:-4px"></p></div>
+      <button id="playerExitButton" class="secondary" style="flex:0 0 auto" onclick="leaveSession()" disabled>EXIT (WAIT FOR ADMIN FINISH)</button>
+    </div>
+    <div id="playerFinishBanner" class="finish-banner hidden"></div>
+
+    <nav class="player-tabs" aria-label="Player dashboard navigation">
+      <button id="playerTabButtonMain" class="player-tab-button active" onclick="showPlayerTab('main')">MAIN</button>
+      <button id="playerTabButtonInventory" class="player-tab-button" onclick="showPlayerTab('inventory')">INVENTORY</button>
+      <button id="playerTabButtonLog" class="player-tab-button" onclick="showPlayerTab('log')">GAME LOG</button>
+    </nav>
+
+    <section id="playerTabMain" class="player-tab-content active">
+      <div class="player-main-grid">
+        <div>
+          <div class="panel player-health-panel">
+            <div class="eyebrow">YOUR HEALTH</div>
+            <div class="player-head"><h2 id="playerCharacter" style="margin:10px 0">CHARACTER</h2><div class="hp-number" id="playerHp">100 / 100</div></div>
+            <div class="hp-track"><div id="playerHpFill" class="hp-fill" style="width:100%"></div></div>
+            <p class="muted" style="font-size:12px">Health diperbarui otomatis ketika Admin mengubah permainan atau setelah Threat diselesaikan.</p>
+          </div>
+          <div id="playerTurnStatus" class="turn-banner">Menunggu Admin menentukan giliran.</div>
+          <div class="dice-panel">
+            <div class="dice-panel-head"><b>YOUR DIGITAL DICE</b><span class="pill">1–6</span></div>
+            <div id="playerDiceResult" class="dice-empty">Belum ada lemparan dadu.</div>
+            <button id="rollDiceButton" class="primary" style="width:100%" onclick="rollDice()" disabled>ROLL DICE</button>
+            <p id="diceTurnHint" class="muted" style="font-size:11px;margin:8px 0 0">Setelah menyelesaikan langkah dan Threat, tunggu Admin menekan tombol GILIRAN untuk berpindah ke Player berikutnya.</p>
+            <div id="playerRouteStatus" class="route-status">Rute akan ditampilkan setelah bergabung.</div>
+          </div>
+          <div class="notice">Di bagian Main, hadapi Threat dan pilih Defense Card atau Special Card yang sesuai. Kartu yang tersimpan dapat dilihat dan digunakan melalui Inventory.</div>
+        </div>
+
+        <div class="panel">
+          <div class="eyebrow">LIVE CARD CENTER</div>
+          <h2>ACTIVE THREAT</h2>
+          <div id="playerThreatArea"><p class="muted">Belum ada Threat. Tunggu Admin membagikan kartu.</p></div>
+          <h3 style="margin-top:20px">YOUR LATEST CARD</h3>
+          <div id="latestCard"><p class="muted">Belum ada kartu.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="playerTabInventory" class="player-tab-content">
+      <div class="panel">
+        <div class="eyebrow">YOUR COLLECTION</div>
+        <h2>INVENTORY</h2>
+        <p class="muted" style="font-size:12px">Semua Defense Card dan Special Card yang kamu simpan ada di sini. Gunakan tombol pada kartu untuk mengaktifkan efeknya.</p>
+        <div id="playerInventory" class="inventory"></div>
+      </div>
+    </section>
+
+    <section id="playerTabLog" class="player-tab-content">
+      <div class="panel">
+        <div class="eyebrow">MATCH HISTORY</div>
+        <h2>GAME LOG</h2>
+        <p class="muted" style="font-size:12px">Catatan aktivitas permainan beserta waktu saat aktivitas tersebut terjadi.</p>
+        <div id="playerGameLog" class="log player-log-panel"></div>
+      </div>
+    </section>
+  </section>
+
+</main>
+
+<footer>NETSHIELD: CYBERSECURITY SURVIVAL · LOCAL DEMO PROTOTYPE</footer>
+
+<div id="toast" class="toast hidden"></div>
+<div id="adminSpecialToast" class="admin-special-toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ===================== SUPABASE CONFIGURATION ===================== */
+const SUPABASE_URL = "https://cjiwucahleqiqlatvbxs.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_9hWyVFNo6I9Ha_hhZTVRXw_194SkD3f";
+const ADMIN_PIN = "2011570"; // PIN demo browser; bukan autentikasi server.
+const TABLE_NAME = "netshield_games";
+
+/* ===================== CHARACTER DATA ===================== */
+const CHARACTERS = ["Azura","Doni","Zeno","Kroma"];
+const CHARACTER_ROLES = {Azura:"The E-Shopper",Doni:"The Influencer",Zeno:"The Gamer",Kroma:"The IT-Specialist"};
+const CHARACTER_IMAGES = {Azura:"characters/azura.png",Doni:"characters/doni.png",Zeno:"characters/zeno.png",Kroma:"characters/kroma.png"};
+const CHARACTER_SKILLS = {
+  Zeno:["Fake Game Account Seller","Password Attack"],
+  Doni:["Phishing","Identity Theft"],
+  Kroma:["Malware","Unauthorized Access"],
+  Azura:["Fake Online Store","Social Engineering"]
+};
+
+/* ===================== CARD DATABASE ===================== */
+const DECKS = {
+ Threat:[
+  {name:"Phishing",description:"Scammers impersonate trusted sources to steal personal information through fake messages or links.",image:"cards/threat/1-PHISHING.png"},
+  {name:"Malware",description:"Malicious software that can disrupt a device or steal data.",image:"cards/threat/2 -MALWARE.png"},
+  {name:"Fake Game Account Seller",description:"A seller offers fake or stolen game accounts to scam buyers.",image:"cards/threat/3-FAKE GAME ACCOUNT SELLER.png"},
+  {name:"Identity Theft",description:"Someone steals and uses another person's identity without permission.",image:"cards/threat/4-IDENTITY THEFT.png"},
+  {name:"Password Attack",description:"An attempt to access an account by attacking its password.",image:"cards/threat/5-PASSWORD ATTACK.png"},
+  {name:"Evil Twin WiFi",description:"A fake Wi-Fi network pretends to be a trusted network.",image:"cards/threat/6-EVIL TWIN WIFI.png"},
+  {name:"Social Engineering",description:"Someone manipulates a person into revealing sensitive information.",image:"cards/threat/7-SOCIAL ENGINEERING.png"},
+  {name:"Spyware",description:"Software that secretly monitors a user's activity.",image:"cards/threat/8-SPYWARE.png"},
+  {name:"Unauthorized Access",description:"Someone accesses an account or system without permission.",image:"cards/threat/9-UNAUTHORIZED ACCES.png"},
+  {name:"Fake Online Store",description:"A fake online shop tricks customers into making unsafe purchases.",image:"cards/threat/10-FAKE ONLINE STORE.png"}
+ ],
+ Defense:[
+  {name:"HP Recovery",description:"Defense card from the NETSHIELD collection.",image:"cards/defense/1-HP RECOVERY.png"},
+  {name:"Antivirus",description:"Protection against malicious software.",image:"cards/defense/2-ANTIVIRUS.png"},
+  {name:"Trusted Marketplace Check",description:"Check the marketplace before making a purchase.",image:"cards/defense/3-TRUSTED MARKETPLACE CHECK.png"},
+  {name:"Multi-Factor Authentication (MFA)",description:"Add another verification layer to an account.",image:"cards/defense/4-MULTI-FACTOR AUTHENTICATION (MFA).png"},
+  {name:"Password Manager",description:"Help manage account passwords.",image:"cards/defense/5-PASSWORD MANAGER.png"},
+  {name:"VPN Secure Connection",description:"Help protect a network connection.",image:"cards/defense/6-VPN_SECURE CONNECTION.png"},
+  {name:"Verify Before Trusting",description:"Check information before trusting it.",image:"cards/defense/7-VERIFY BEFORE TRUSTING.png"},
+  {name:"Anti-Spyware Scan",description:"Scan for and handle spyware.",image:"cards/defense/8-ANTI-SPYWARE SCAN.png"},
+  {name:"Firewall",description:"Help block suspicious network connections.",image:"cards/defense/9-FIREWALL.png"},
+  {name:"Secure Payment",description:"Use a safe payment method.",image:"cards/defense/10-SECURE PAYMENT.png"}
+ ],
+ Special:[
+  {name:"Lucky Move",description:"Move forward 1 space on the physical board. Use only during your turn.",image:"cards/special/1-LUCKY MOVE.png",effect:"move1"},
+  {name:"Quick Move",description:"Move forward 2 spaces on the physical board. Use only during your turn.",image:"cards/special/2-QUICK MOVE.png",effect:"move2"},
+  {name:"Fast Move",description:"Move forward 3 spaces on the physical board. Use only during your turn.",image:"cards/special/3-FAST MOVE.png",effect:"move3"},
+  {name:"CyberShield",description:"Immediately recover +15 Health. Can be used outside your turn.",image:"cards/special/4-CYBERSHIELD.png",effect:"heal15"},
+  {name:"Recovery Kit",description:"Immediately recover +25 Health. Can be used outside your turn.",image:"cards/special/5-RECOVERY KIT.png",effect:"heal25"},
+  {name:"Security Backup",description:"Cancel the active Threat when it appears. Use only during your turn while a Threat is active.",image:"cards/special/6-SECURITY BACKUP.png",effect:"cancelThreat"},
+  {name:"Armor Defense",description:"Permanent unlimited protection. Automatically cancels every Threat without damage.",image:"cards/special/7-ARMOR DEFENSE.png",effect:"armor"},
+  {name:"Extra Roll",description:"Immediately roll the physical die one more time and move according to the result.",image:"cards/special/8-EXTRA ROLL.png",effect:"extraRoll"},
+  {name:"Defense Boost",description:"Immediately receive 2 random Defense Cards.",image:"cards/special/9-DEFENSE BOOST.png",effect:"defenseBoost"},
+  {name:"HP Recovery",description:"When Health is below 50, automatically recover +50 Health. Otherwise keep this card until Health drops below 50.",image:"cards/special/10-HP RECOVERY.png",effect:"heal50below50"}
+ ]
+};
+
+const THREAT_DAMAGE={
+  phishing:15,
+  malware:15,
+  fakegameaccountseller:20,
+  identitytheft:20,
+  passwordattack:15,
+  eviltwinwifi:15,
+  socialengineering:15,
+  spyware:15,
+  unauthorizedaccess:20,
+  fakeonlinestore:20
+};
+
+const ARMOR_DEFENSE_DROP_RATE=0.01; // 1% dari setiap Special Card draw.
+
+/* ===================== AUTOMATIC THREAT / DEFENSE MATCHING ===================== */
+/*
+  Nomor kartu diambil dari urutan kartu pada DECKS:
+  Threat #1 hanya cocok dengan Defense #1, Threat #2 dengan Defense #2,
+  dan seterusnya sampai kartu nomor 10.
+*/
+const THREAT_DEFENSE_PAIRS = {
+  1:[1],
+  2:[2],
+  3:[3],
+  4:[4],
+  5:[5],
+  6:[6],
+  7:[7],
+  8:[8],
+  9:[9],
+  10:[10]
+};
+
+
+/* ===================== ROUTE BOARD DATA ===================== */
+const ROUTE_SQUARES = {
+  safe:[
+    "start","learning","threat","learning","safe","special","learning","threat","learning","safe",
+    "learning","special","threat","safe","special","learning","safe","threat","recovery","learning",
+    "special","safe","learning","threat","learning","recovery","special","threat","learning","safe","finish"
+  ],
+  express:[
+    "start","threat","learning","special","threat","learning","threat","learning","threat","learning",
+    "special","threat","learning","special","threat","recovery","learning","threat","special","threat","safe","finish"
+  ]
+};
+const ROUTE_LABELS = {safe:"SAFE ROUTE",express:"EXPRESS ROUTE"};
+const ROUTE_FINISH_POSITIONS = {safe:31,express:22};
+
+
+/* ===================== ROUTE HELPERS & AUTOMATIC SQUARE EFFECTS ===================== */
+function routeName(player){
+  const routeKey=player?.route;
+  return ROUTE_LABELS[routeKey]||ROUTE_LABELS.safe;
+}
+
+function routeFinishPosition(player){
+  return ROUTE_FINISH_POSITIONS[player?.route]||ROUTE_FINISH_POSITIONS.safe;
+}
+
+function routeSquare(player,position=player?.position){
+  const route=ROUTE_SQUARES[player?.route]||ROUTE_SQUARES.safe;
+  const index=Math.max(0,Math.min(route.length-1,Math.floor(Number(position)||1)-1));
+  return route[index]||"start";
+}
+
+function resolveAutomaticWinner(){
+  if(roomState.finished)return playerById(roomState.winnerId)||null;
+  const players=orderedPlayers();
+  if(!players.length)return null;
+
+  const instantWinner=players
+    .filter(player=>player.routeFinished&&Number(player.hp)>=100)
+    .sort((a,b)=>(Number(a.finishOrder)||Infinity)-(Number(b.finishOrder)||Infinity))[0];
+
+  let winner=null;
+  if(instantWinner){
+    winner=instantWinner;
+    addLog("PLAYER "+playerNumber(winner)+" — "+winner.name+" mencapai Finish dengan 100 HP dan langsung dinyatakan sebagai pemenang.");
+  }else if(players.every(player=>player.routeFinished)){
+    winner=[...players].sort((a,b)=>{
+      const healthDifference=(Number(b.hp)||0)-(Number(a.hp)||0);
+      if(healthDifference!==0)return healthDifference;
+      return (Number(a.finishOrder)||Infinity)-(Number(b.finishOrder)||Infinity);
+    })[0];
+    if(winner){
+      addLog("Semua Player telah mencapai Finish. Pemenang ditentukan berdasarkan Health tertinggi: Player "+playerNumber(winner)+" — "+winner.name+" dengan "+winner.hp+" HP.");
+    }
+  }
+
+  if(winner){
+    roomState.finished=true;
+    roomState.winnerId=winner.id;
+    roomState.finishedAt=new Date().toISOString();
+    roomState.currentTurnPlayerId=null;
+    roomState.turnId=null;
+    addLog("GAME FINISHED. WINNER: Player "+playerNumber(winner)+" — "+winner.name+" ("+winner.hp+" HP).");
+  }
+  return winner;
+}
+
+function createThreatForPlayer(player,cardData,source="Route Threat"){
+  if(!player||!cardData)return null;
+  if(player.activeThreat){
+    showToast("Player ini masih memiliki Threat aktif.","error");
+    return null;
+  }
+
+  const card=newCardInstance(cardData,"Threat");
+  const damage=THREAT_DAMAGE[normalizeThreat(card.name)]??0;
+  player.latest={...card,damage};
+  player.lastThreatResult=null;
+
+  const matchingSkill=(CHARACTER_SKILLS[player.character]||[]).some(
+    name=>normalizeThreat(name)===normalizeThreat(card.name)
+  );
+  if(matchingSkill){
+    player.lastThreatResult={
+      correct:true,
+      threatNumber:getCardNumber(card,"Threat"),
+      threatName:card.name,
+      defenseName:"Character Skill · "+player.character,
+      message:"Character Skill cocok! Threat otomatis di-counter tanpa memilih Defense Card dan tanpa kehilangan Health.",
+      damage:0
+    };
+    addLog(source+": Player "+playerNumber(player)+" — "+player.name+" otomatis menangkal Threat "+card.name+" menggunakan Character Skill.");
+  }else if(playerHasArmor(player)){
+    player.lastThreatResult={
+      correct:true,
+      threatNumber:getCardNumber(card,"Threat"),
+      threatName:card.name,
+      defenseName:"Armor Defense",
+      message:"Armor Defense aktif. Threat dibatalkan otomatis tanpa damage.",
+      damage:0
+    };
+    addLog(source+": Armor Defense Player "+playerNumber(player)+" membatalkan Threat "+card.name+" secara otomatis.");
+  }else{
+    player.activeThreat={
+      id:card.instanceId,
+      card,
+      damage,
+      status:"waiting_player",
+      defenseAttempt:null,
+      createdAt:new Date().toISOString()
+    };
+    addLog(source+": Player "+playerNumber(player)+" — "+player.name+" mendapatkan Threat "+card.name+" (-"+damage+" HP jika tidak ditangani).");
+  }
+  return card;
+}
+
+function grantSpecialCardToPlayer(player,cardData,source="Route Special"){
+  if(!player||!cardData)return null;
+  const card=newCardInstance(cardData,"Special");
+  player.inventory=Array.isArray(player.inventory)?player.inventory:[];
+  player.latest=card;
+  let note="Special Card diterima.";
+
+  if(card.effect==="armor"){
+    player.armorDefense=true;
+    player.inventory.push({...card,permanent:true});
+    note="Armor Defense aktif permanen dan dapat membatalkan Threat tanpa batas.";
+  }else if(card.effect==="extraRoll"){
+    player.extraDiceRolls=(Number(player.extraDiceRolls)||0)+1;
+    player.latest={...card,description:"EXTRA ROLL AKTIF! Kamu mendapat satu kesempatan lempar dadu digital tambahan pada giliran ini."};
+    note="Mendapatkan 1 kesempatan lempar dadu tambahan.";
+  }else if(card.effect==="defenseBoost"){
+    const bonusCards=randomDefenseCards(2);
+    player.inventory.push(...bonusCards);
+    player.latest={...card,description:"Defense Boost aktif. 2 Defense Card acak telah ditambahkan ke inventory."};
+    note="Defense Boost aktif: menerima 2 Defense Card acak ("+bonusCards.map(item=>item.name).join(", ")+ ").";
+  }else if(card.effect==="heal50below50"){
+    player.inventory.push(card);
+    if(Number(player.hp)<50){
+      const before=Number(player.hp)||0;
+      activatePendingHpRecovery(player,"HP Recovery diperoleh dari Special Space.");
+      note="HP Recovery otomatis aktif: Health "+before+" → "+player.hp+" HP.";
+    }else{
+      note="HP Recovery disimpan dan otomatis aktif saat Health turun di bawah 50.";
+    }
+  }else{
+    player.inventory.push(card);
+    if(card.effect==="heal15")note="Kartu menambah +15 HP saat digunakan.";
+    if(card.effect==="heal25")note="Kartu menambah +25 HP saat digunakan.";
+    if(card.effect==="cancelThreat")note="Dapat digunakan untuk membatalkan Threat aktif.";
+    if(["move1","move2","move3"].includes(card.effect))note="Kartu gerak tersimpan di Inventory.";
+  }
+
+  addSpecialNotification(player,card,"DITERIMA",note);
+  addLog(source+": Player "+playerNumber(player)+" — "+player.name+" mendapatkan Special Card "+card.name+".");
+  return card;
+}
+
+function markPlayerRouteFinished(player){
+  if(!player||player.routeFinished)return false;
+  player.routeFinished=true;
+  roomState.finishSequence=(Number(roomState.finishSequence)||0)+1;
+  player.finishOrder=roomState.finishSequence;
+  player.finishedAt=new Date().toISOString();
+  addLog("PLAYER "+playerNumber(player)+" — "+player.name+" mencapai FINISH pada "+routeName(player)+" dengan "+player.hp+" HP. Finish order: "+player.finishOrder+".");
+  const winner=resolveAutomaticWinner();
+  return Boolean(winner);
+}
+
+function applyRouteSquareEffect(player,source="Dice"){
+  if(!player||roomState.finished||player.routeFinished)return;
+  const square=routeSquare(player,player.position);
+  const position=Number(player.position)||1;
+
+  switch(square){
+    case "learning": {
+      const card=randomDefenseCards(1)[0];
+      if(card){
+        player.inventory=Array.isArray(player.inventory)?player.inventory:[];
+        player.inventory.push(card);
+        player.latest=card;
+        addLog("LEARNING SPACE #"+position+": Player "+playerNumber(player)+" — "+player.name+" mendapatkan 1 Defense Card: "+card.name+".");
+      }
+      break;
+    }
+    case "threat": {
+      const deck=DECKS.Threat;
+      const card=deck[Math.floor(Math.random()*deck.length)];
+      createThreatForPlayer(player,card,"THREAT SPACE #"+position);
+      break;
+    }
+    case "special": {
+      const card=drawSpecialCard();
+      grantSpecialCardToPlayer(player,card,"SPECIAL SPACE #"+position);
+      break;
+    }
+    case "recovery": {
+      const result=applyPlayerHealth(player,15,"Recovery Space");
+      addLog("RECOVERY SPACE #"+position+": Player "+playerNumber(player)+" — "+player.name+" memulihkan +"+result.applied+" HP ("+result.before+" → "+result.after+" HP).");
+      break;
+    }
+    case "safe":
+      addLog("SAFE SPACE #"+position+": Player "+playerNumber(player)+" — "+player.name+" mendarat di tempat aman. Tidak ada efek.");
+      break;
+    case "finish":
+      markPlayerRouteFinished(player);
+      break;
+    case "start":
+      addLog("Player "+playerNumber(player)+" berada di START SPACE.");
+      break;
+    default:
+      addLog("Kotak #"+position+" tidak memiliki efek tambahan.");
+  }
+}
+
+function movePlayerAlongRoute(player,spaces,source="Movement"){
+  if(!player||roomState.finished||player.routeFinished)return false;
+  if(player.activeThreat){
+    showToast("Selesaikan Threat aktif sebelum bergerak lagi.","error");
+    return false;
+  }
+  const amount=Math.max(0,Math.floor(Number(spaces)||0));
+  if(amount<1)return false;
+  const finish=routeFinishPosition(player);
+  const from=Math.max(1,Math.min(finish,Math.floor(Number(player.position)||1)));
+  const to=Math.min(finish,from+amount);
+  player.position=to;
+  addLog("Player "+playerNumber(player)+" — "+player.name+" bergerak dari kotak "+from+" ke kotak "+to+" pada "+routeName(player)+" melalui "+source+".");
+  applyRouteSquareEffect(player,source);
+  return true;
+}
+
+/* ===================== GLOBAL STATE ===================== */
+let db=null;
+let roomCode="";
+let roomState=makeEmptyState();
+let roomChannel=null;
+// Mencegah connectRoom dipanggil dua kali saat input Room Code blur dan tombol JOIN diklik.
+let roomConnectionPromise=null;
+let roomConnectionCode="";
+let roomStatePollTimer=null;
+let roomStatePollBusy=false;
+let currentPlayerId=null;
+let isAdmin=false;
+let selectedCharacter="";
+let selectedDefenseId="";
+let toastTimer=null;
+let adminToastTimer=null;
+let currentPlayerTab="main";
+let lastAdminEventId="";
+let saveInProgress=false;
+const $=id=>document.getElementById(id);
+const clone=value=>JSON.parse(JSON.stringify(value));
+
+function makeEmptyState(){
+  return {players:[],logs:["Game room dibuat. Menunggu Player bergabung."],specialNotifications:[],currentTurnPlayerId:null,turnId:null,lastDiceRoll:null,gameStarted:false,turnNumber:0,finishSequence:0,latest:{},revision:0,finished:false,winnerId:null,finishedAt:null};
+}
+
+function normalizeRoomState(value){
+  const state=value||makeEmptyState();
+  state.players=Array.isArray(state.players)?state.players:[];
+  state.logs=Array.isArray(state.logs)?state.logs:[];
+  state.specialNotifications=Array.isArray(state.specialNotifications)?state.specialNotifications:[];
+  state.currentTurnPlayerId=state.currentTurnPlayerId||null;
+  state.turnId=state.turnId||null;
+  state.lastDiceRoll=state.lastDiceRoll||null;
+  state.gameStarted=Boolean(state.gameStarted);
+  state.turnNumber=Math.max(0,Number(state.turnNumber)||0);
+  state.finishSequence=Math.max(0,Number(state.finishSequence)||0);
+  state.players.forEach(player=>{
+    player.inventory=Array.isArray(player.inventory)?player.inventory:[];
+    player.hp=Number.isFinite(Number(player.hp))?Number(player.hp):100;
+    player.armorDefense=Boolean(player.armorDefense)||player.inventory.some(card=>card.effect==="armor");
+    player.extraDiceRolls=Math.max(0,Number(player.extraDiceRolls)||0);
+    player.diceRolledInTurn=Boolean(player.diceRolledInTurn);
+    player.lastDiceTurnId=player.lastDiceTurnId||null;
+    player.route=player.route==="express"?"express":"safe";
+    player.position=Math.max(1,Number(player.position)||1);
+    player.routeFinished=Boolean(player.routeFinished);
+    player.finishOrder=Number.isFinite(Number(player.finishOrder))?Number(player.finishOrder):null;
+    player.initialDefenseDealt=Boolean(player.initialDefenseDealt);
+  });
+  state.latest=state.latest||{};
+  state.revision=Number(state.revision)||0;
+  state.finished=Boolean(state.finished);
+  state.winnerId=state.winnerId||null;
+  return state;
+}
+
+function initSupabase(){
+  if(SUPABASE_URL.startsWith("PASTE_")||SUPABASE_ANON_KEY.startsWith("PASTE_")){
+    setConnection(false,"Isi Supabase URL dan anon key di bagian CONFIGURATION.");
+    return false;
+  }
+  if(!window.supabase?.createClient){
+    setConnection(false,"Library Supabase tidak termuat. Periksa koneksi internet.");
+    return false;
+  }
+  if(!db)db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  return true;
+}
+
+function setConnection(connected,message){
+  const badge=$("connectionBadge");
+  if(!badge)return;
+  badge.textContent=connected?"● DATABASE CONNECTED · LIVE":"● DATABASE NOT CONNECTED";
+  badge.className="pill "+(connected?"live":"warn");
+  if(message)showToast(message,connected?"success":"error");
+}
+
+function showToast(message,type="info"){
+  const el=$("toast");
+  if(!el)return;
+  el.textContent=message;
+  el.className="toast"+(type==="error"?" error":type==="success"?" success":"");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.add("hidden"),4200);
+}
+
+function showError(id,message){
+  const el=$(id);
+  el.textContent=message;
+  el.classList.remove("hidden");
+  el.classList.add("error");
+}
+
+function clearError(id){
+  const el=$(id);
+  el.textContent="";
+  el.classList.add("hidden");
+  el.classList.remove("error");
+}
+
+function addLog(message){
+  const stamp=new Date().toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+  roomState.logs.unshift(stamp+" — "+message);
+  roomState.logs=roomState.logs.slice(0,60);
+}
+
+function addSpecialNotification(player,card,action,effectText){
+  const stamp=new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  const message=`PLAYER ${playerNumber(player)} · ${player.name} (${player.character}) — ${card.name} · ${action}${effectText?" — "+effectText:""}`;
+  roomState.specialNotifications=Array.isArray(roomState.specialNotifications)?roomState.specialNotifications:[];
+  roomState.specialNotifications.unshift({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),at:stamp,message,cardName:card.name,playerId:player.id,playerNumber:playerNumber(player),playerName:player.name,action});
+  roomState.specialNotifications=roomState.specialNotifications.slice(0,30);
+  addLog("SPECIAL NOTIFICATION: "+message);
+}
+
+function showAdminSpecialToast(item){
+  if(!isAdmin||!item||!item.id||item.id===lastAdminEventId)return;
+  lastAdminEventId=item.id;
+  const toast=$("adminSpecialToast");
+  if(!toast||!$("adminScreen")?.classList.contains("active"))return;
+
+  toast.innerHTML=`<strong>PLAYER ${Number(item.playerNumber)||"?"}</strong> · ${escapeHtml(item.playerName||"Player")} menggunakan <strong>${escapeHtml(item.cardName||"Special Card")}</strong>`;
+  toast.classList.add("show");
+  clearTimeout(adminToastTimer);
+  adminToastTimer=setTimeout(()=>toast.classList.remove("show"),3000);
+}
+
+function showPlayerTab(tab){
+  const allowed=["main","inventory","log"];
+  if(!allowed.includes(tab))return;
+  currentPlayerTab=tab;
+  localStorage.setItem("netshield_player_tab",tab);
+
+  const tabs={main:"playerTabMain",inventory:"playerTabInventory",log:"playerTabLog"};
+  const buttons={main:"playerTabButtonMain",inventory:"playerTabButtonInventory",log:"playerTabButtonLog"};
+
+  Object.entries(tabs).forEach(([key,id])=>{
+    $(id)?.classList.toggle("active",key===tab);
+    $(buttons[key])?.classList.toggle("active",key===tab);
+  });
+}
+
+function playerHasArmor(player){
+  return Boolean(player?.armorDefense)||(player?.inventory||[]).some(card=>card.type==="Special"&&card.effect==="armor");
+}
+
+function currentTurnPlayer(){
+  return playerById(roomState.currentTurnPlayerId);
+}
+
+function isPlayerTurn(player){
+  return Boolean(player&&roomState.currentTurnPlayerId&&roomState.currentTurnPlayerId===player.id);
+}
+
+function requirePlayerTurn(player,actionName="aksi ini"){
+  if(!player||!isPlayerTurn(player)){
+    const active=currentTurnPlayer();
+    showToast(active?`Belum giliranmu. Sekarang giliran Player ${playerNumber(active)}.`:"Admin belum menentukan giliran.","error");
+    return false;
+  }
+  return true;
+}
+
+function applyPlayerHealth(player,delta,source=""){
+  const before=Number(player.hp)||0;
+  player.hp=Math.max(0,Math.min(100,before+Number(delta||0)));
+  const applied=player.hp-before;
+  if(player.hp<50)activatePendingHpRecovery(player,source||"Health turun di bawah 50");
+  return {before,after:player.hp,applied};
+}
+
+function activatePendingHpRecovery(player,reason=""){
+  if(!player||player.hp>=50)return false;
+  const index=(player.inventory||[]).findIndex(card=>card.type==="Special"&&card.effect==="heal50below50");
+  if(index<0)return false;
+  const card=player.inventory.splice(index,1)[0];
+  const before=Number(player.hp)||0;
+  player.hp=Math.min(100,before+50);
+  player.latest={...card,description:"HP RECOVERY AKTIF OTOMATIS! Health bertambah dari "+before+" menjadi "+player.hp+" HP (+"+(player.hp-before)+" HP)."};
+  return true;
+}
+
+function drawSpecialCard(){
+  const deck=DECKS.Special;
+  const armor=deck.find(card=>card.effect==="armor");
+  if(armor&&Math.random()<ARMOR_DEFENSE_DROP_RATE)return armor;
+  const common=deck.filter(card=>card.effect!=="armor");
+  return common[Math.floor(Math.random()*common.length)];
+}
+
+function randomDefenseCard(){
+  const deck=DECKS.Defense;
+  return newCardInstance(deck[Math.floor(Math.random()*deck.length)],"Defense");
+}
+
+// Mengambil beberapa Defense Card acak tanpa duplikasi nama kartu.
+// Dipakai saat Player baru bergabung dan saat Admin memberi Defense.
+function randomDefenseCards(count=1){
+  const deck=[...DECKS.Defense];
+  const amount=Math.max(0,Math.min(deck.length,Math.floor(Number(count)||0)));
+
+  // Fisher-Yates shuffle agar pemilihan kartu acak dan tidak berulang.
+  for(let i=deck.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [deck[i],deck[j]]=[deck[j],deck[i]];
+  }
+
+  return deck.slice(0,amount).map(card=>newCardInstance(card,"Defense"));
+}
+
+function playerById(id){
+  return roomState.players.find(player=>player.id===id);
+}
+
+function selectedHealthPlayer(){
+  return playerById($("healthTargetPlayer")?.value);
+}
+
+function playerNumber(player){
+  return Number(player.slot||player.playerNumber||roomState.players.indexOf(player)+1);
+}
+
+function normalizeThreat(value){
+  return String(value).toLowerCase().replace(/[^a-z0-9]/g,"");
+}
+
+function escapeHtml(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]));
+}
+
+function getCardNumber(card,type){
+  if(card&&Number.isInteger(Number(card.number))&&Number(card.number)>0){
+    return Number(card.number);
+  }
+
+  const deck=DECKS[type]||[];
+  const index=deck.findIndex(item=>item.name===card?.name);
+  return index>=0?index+1:null;
+}
+
+function newCardInstance(card,type){
+  return {
+    ...card,
+    type,
+    number:getCardNumber(card,type),
+    instanceId:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random())
+  };
+}
+
+function ensureAdminActive(){
+  if(!isAdmin||roomState.finished){
+    showToast("Permainan sudah selesai atau kamu bukan Admin.","error");
+    return false;
+  }
+  return true;
+}
+
+/* ===================== SCREEN NAVIGATION + FRIENDLY URL ROUTES ===================== */
+const SCREEN_ROUTE_SLUGS={
+  homeScreen:"",
+  cardsScreen:"allcards",
+  charactersScreen:"characters",
+  howScreen:"howtoplay",
+  teamScreen:"team",
+  aboutScreen:"about",
+  joinScreen:"join",
+  adminLoginScreen:"adminlogin",
+  adminScreen:"admin",
+  playerScreen:"playgame"
+};
+const ROUTE_SLUG_SCREENS=Object.fromEntries(
+  Object.entries(SCREEN_ROUTE_SLUGS).map(([screen,slug])=>[slug,screen])
+);
+
+function getAppBasePath(){
+  const path=location.pathname||"/";
+  if(location.hostname.toLowerCase().endsWith("github.io")){
+    const firstSegment=path.split("/").filter(Boolean)[0]||"NETSHIELD";
+    return "/"+firstSegment+"/";
+  }
+  const match=path.match(/^(.*?\/NETSHIELD\/)/i);
+  if(match)return match[1];
+  if(path.endsWith("/"))return path;
+  return path.slice(0,path.lastIndexOf("/")+1)||"/";
+}
+
+function routeSlugFromLocation(){
+  if(location.protocol==="file:"){
+    return localStorage.getItem("netshield_last_route")||"";
+  }
+  const base=getAppBasePath();
+  let relative=(location.pathname||"").startsWith(base)
+    ?location.pathname.slice(base.length)
+    :"";
+  relative=relative.replace(/^\/+|\/+$/g,"");
+  if(relative==="index.html"||relative==="404.html")relative="";
+  return relative;
+}
+
+function screenFromCurrentUrl(){
+  const slug=routeSlugFromLocation();
+  return ROUTE_SLUG_SCREENS[slug]||"homeScreen";
+}
+
+function updateBrowserRoute(screenId,{replace=false,category=null}={}){
+  const slug=SCREEN_ROUTE_SLUGS[screenId]??"";
+  localStorage.setItem("netshield_last_route",slug);
+  if(screenId==="cardsScreen"&&category){
+    localStorage.setItem("netshield_last_card_category",category);
+  }
+  if(location.protocol==="file:")return;
+  const base=getAppBasePath();
+  const target=base+(slug||"");
+  const query=screenId==="cardsScreen"&&category&&category!=="All"
+    ?"?category="+encodeURIComponent(category)
+    :"";
+  const finalUrl=target+query;
+  const current=location.pathname+location.search;
+  if(current===finalUrl)return;
+  history[replace?"replaceState":"pushState"]({screen:screenId},"",finalUrl);
+}
+
+function showScreen(id,options={}){
+  if(currentPlayerId&&!roomState.finished&&id!=="playerScreen"){
+    showToast("Permainan masih berlangsung. Tunggu Admin menekan FINISH untuk keluar.","error");
+    return;
+  }
+  if(!$(id))return;
+  document.querySelectorAll(".screen").forEach(screen=>screen.classList.remove("active"));
+  $(id).classList.add("active");
+  if(id==="joinScreen")renderCharacterPicker();
+  if(id==="adminScreen"&&isAdmin)renderAdmin();
+  if(options.updateUrl!==false){
+    updateBrowserRoute(id,{replace:Boolean(options.replace),category:options.category||null});
+  }
+}
+
+function applyRouteFromLocation(){
+  const screen=screenFromCurrentUrl();
+  showScreen(screen,{updateUrl:false});
+  if(screen==="cardsScreen"){
+    const fromUrl=new URLSearchParams(location.search).get("category");
+    const category=fromUrl||(location.protocol==="file:"?localStorage.getItem("netshield_last_card_category"):"")||"All";
+    renderCardGallery(["All","Threat","Defense","Special"].includes(category)?category:"All");
+  }
+  if(screen==="charactersScreen")renderCharacters();
+  return screen;
+}
+
+window.addEventListener("popstate",()=>{
+  const target=screenFromCurrentUrl();
+  if(currentPlayerId&&!roomState.finished&&target!=="playerScreen"){
+    updateBrowserRoute("playerScreen",{replace:true});
+    showToast("Permainan masih berlangsung. Kamu tetap berada di halaman Player.","error");
+    return;
+  }
+  applyRouteFromLocation();
+});
+
+function toggleCardsMenu(event){
+  event.stopPropagation();
+  $("cardsDropdown").classList.toggle("open");
+}
+
+function openCardGallery(category){
+  $("cardsDropdown").classList.remove("open");
+  showScreen("cardsScreen",{category});
+  renderCardGallery(category);
+}
+
+document.addEventListener("click",event=>{
+  if(!event.target.closest(".dropdown")){
+    $("cardsDropdown")?.classList.remove("open");
+  }
+});
+
+/* ===================== ROOM CONNECTION ===================== */
+function randomRoomCode(){
+  const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code="";
+  for(let i=0;i<6;i++){
+    code+=alphabet[Math.floor(Math.random()*alphabet.length)];
+  }
+  return code;
+}
+
+async function connectRoom(code){
+  if(!initSupabase())throw new Error("Supabase belum dikonfigurasi.");
+
+  const normalized=String(code||"").trim().toUpperCase();
+  if(!/^[A-Z0-9]{6}$/.test(normalized)){
+    throw new Error("Kode room harus terdiri dari 6 huruf/angka.");
+  }
+
+  // Jika pemanggilan untuk Room yang sama sedang berjalan, gunakan Promise yang sama.
+  // Ini menghindari dua listener dibuat bersamaan dari onblur dan JOIN GAME.
+  if(roomConnectionPromise&&roomConnectionCode===normalized){
+    return await roomConnectionPromise;
+  }
+
+  // Jika koneksi untuk Room lain sedang berjalan, selesaikan dulu sebelum pindah.
+  if(roomConnectionPromise){
+    try{await roomConnectionPromise;}catch(error){}
+  }
+
+  // Room yang sama sudah punya channel aktif, refresh state dan pastikan polling fallback hidup.
+  if(roomCode===normalized&&roomChannel){
+    await reloadRoomState();
+    startRoomStatePolling();
+    return roomState;
+  }
+
+  roomConnectionCode=normalized;
+  const connectionTask=(async()=>{
+    stopRoomStatePolling();
+    if(roomChannel){
+      const previousChannel=roomChannel;
+      roomChannel=null;
+      await db.removeChannel(previousChannel);
+    }
+
+    roomCode=normalized;
+
+    const {data,error}=await db
+      .from(TABLE_NAME)
+      .select("code,state")
+      .eq("code",roomCode)
+      .maybeSingle();
+
+    if(error)throw error;
+    if(!data)throw new Error("Room tidak ditemukan. Periksa kode room dari Admin.");
+
+    roomState=normalizeRoomState(data.state);
+    lastAdminEventId=roomState.specialNotifications?.[0]?.id||"";
+
+    // Nama channel dibuat unik agar tidak menggunakan kembali instance Realtime lama.
+    const channelSuffix=crypto.randomUUID
+      ?crypto.randomUUID()
+      :(String(Date.now())+"-"+Math.random().toString(36).slice(2));
+    const channel=db.channel("netshield-room-"+roomCode+"-"+channelSuffix);
+
+    // Semua listener harus didaftarkan sebelum subscribe().
+    channel.on("postgres_changes",{
+      event:"UPDATE",
+      schema:"public",
+      table:TABLE_NAME,
+      filter:"code=eq."+roomCode
+    },payload=>{
+      if(payload.new?.state){
+        const incoming=normalizeRoomState(payload.new.state);
+        if(incoming.revision>=roomState.revision){
+          roomState=incoming;
+          renderAll();
+        }
+      }
+    });
+
+    roomChannel=channel;
+    channel.subscribe(status=>{
+      if(status==="SUBSCRIBED")setConnection(true);
+      if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"){
+        setConnection(false,"Realtime terputus. Sinkronisasi otomatis tetap mencoba memperbarui data.");
+      }
+    });
+    // Polling 1,2 detik menjadi fallback jika event Realtime terlewat saat Player baru join.
+    startRoomStatePolling();
+
+    $("roomBadge").textContent="ROOM: "+roomCode;
+    $("roomBadge").classList.remove("hidden");
+    renderAll();
+    return roomState;
+  })();
+
+  roomConnectionPromise=connectionTask;
+  try{
+    return await connectionTask;
+  }finally{
+    if(roomConnectionPromise===connectionTask){
+      roomConnectionPromise=null;
+      roomConnectionCode="";
+    }
+  }
+}
+async function reloadRoomState({silent=false}={}){
+  if(!db||!roomCode)return false;
+
+  const {data,error}=await db
+    .from(TABLE_NAME)
+    .select("state")
+    .eq("code",roomCode)
+    .maybeSingle();
+
+  if(error)throw error;
+  if(!data)throw new Error("Room tidak ditemukan.");
+
+  const incoming=normalizeRoomState(data.state);
+  const incomingRevision=Number(incoming.revision)||0;
+  const currentRevision=Number(roomState.revision)||0;
+  if(incomingRevision>currentRevision){
+    roomState=incoming;
+    if(!silent)renderAll();
+    return true;
+  }
+  return false;
+}
+
+function stopRoomStatePolling(){
+  if(roomStatePollTimer){
+    clearInterval(roomStatePollTimer);
+    roomStatePollTimer=null;
+  }
+  roomStatePollBusy=false;
+}
+
+function startRoomStatePolling(){
+  if(roomStatePollTimer)clearInterval(roomStatePollTimer);
+  roomStatePollTimer=setInterval(async()=>{
+    if(!db||!roomCode||roomStatePollBusy||saveInProgress)return;
+    roomStatePollBusy=true;
+    try{
+      const changed=await reloadRoomState({silent:true});
+      if(changed)renderAll();
+    }catch(error){
+      // Realtime remains the primary channel; polling is a quiet fallback.
+    }finally{
+      roomStatePollBusy=false;
+    }
+  },1200);
+}
+
+async function syncRoomStateBeforePlayerAction(){
+  if(!db||!roomCode)throw new Error("Belum terhubung ke room.");
+  await reloadRoomState({silent:true});
+  renderAll();
+}
+
+async function saveRoomState(){
+  if(!db||!roomCode)throw new Error("Belum terhubung ke room.");
+  if(saveInProgress)throw new Error("Perubahan sebelumnya masih disimpan. Coba lagi.");
+
+  saveInProgress=true;
+
+  try{
+    const expectedRevision=Number(roomState.revision)||0;
+    const updated=clone(roomState);
+    updated.revision=expectedRevision+1;
+
+    const {data,error}=await db
+      .from(TABLE_NAME)
+      .update({
+        state:updated,
+        updated_at:new Date().toISOString()
+      })
+      .eq("code",roomCode)
+      .eq("state->>revision",String(expectedRevision))
+      .select("state")
+      .maybeSingle();
+
+    if(error)throw error;
+
+    if(!data){
+      await reloadRoomState();
+      throw new Error("Data berubah dari perangkat lain. Tampilan sudah disegarkan, silakan ulangi tindakan.");
+    }
+
+    roomState=normalizeRoomState(data.state);
+    renderAll();
+  }finally{
+    saveInProgress=false;
+  }
+}
+
+async function persistOrRestore(){
+  try{
+    await saveRoomState();
+    return true;
+  }catch(error){
+    try{await reloadRoomState();}catch(reloadError){}
+    showToast(error.message||"Gagal menyimpan perubahan.","error");
+    return false;
+  }
+}
+
+async function createRoom(){
+  clearError("loginError");
+
+  if($("createAdminPin").value!==ADMIN_PIN){
+    showError("loginError","Admin PIN salah.");
+    return;
+  }
+
+  if(!initSupabase())return;
+
+  try{
+    let created=null,code="";
+
+    for(let attempt=0;attempt<5&&!created;attempt++){
+      code=randomRoomCode();
+
+      const {data,error}=await db
+        .from(TABLE_NAME)
+        .insert({
+          code,
+          state:makeEmptyState(),
+          updated_at:new Date().toISOString()
+        })
+        .select("code")
+        .maybeSingle();
+
+      if(!error)created=data;
+      else if(error.code!=="23505")throw error;
+    }
+
+    if(!created)throw new Error("Tidak bisa membuat kode room. Coba lagi.");
+
+    isAdmin=true;
+    currentPlayerId=null;
+
+    await connectRoom(code);
+    localStorage.setItem("netshield_active_session",JSON.stringify({role:"admin",roomCode:code}));
+
+    $("roleBadge").textContent="ADMIN MODE";
+    $("roleBadge").classList.remove("hidden");
+    $("adminRoomCodeDisplay").textContent=code;
+
+    showScreen("adminScreen");
+    renderAll();
+
+    showToast("Room berhasil dibuat. Bagikan link website dan kode room kepada juri.","success");
+  }catch(error){
+    isAdmin=false;
+    showError("loginError",error.message||"Gagal membuat room.");
+  }
+}
+
+async function adminLogin(){
+  clearError("loginError");
+
+  if($("loginAdminPin").value!==ADMIN_PIN){
+    showError("loginError","Admin PIN salah.");
+    return;
+  }
+
+  try{
+    isAdmin=true;
+    currentPlayerId=null;
+
+    await connectRoom($("adminRoomCode").value);
+    localStorage.setItem("netshield_active_session",JSON.stringify({role:"admin",roomCode:roomCode}));
+
+    $("roleBadge").textContent="ADMIN MODE";
+    $("roleBadge").classList.remove("hidden");
+    $("adminRoomCodeDisplay").textContent=roomCode;
+
+    showScreen("adminScreen");
+    renderAll();
+  }catch(error){
+    isAdmin=false;
+    showError("loginError",error.message||"Tidak bisa membuka room.");
+  }
+}
+
+async function copyRoomCode(){
+  try{
+    await navigator.clipboard.writeText(roomCode);
+    showToast("Kode room berhasil disalin.","success");
+  }catch(error){
+    showToast("Kode room: "+roomCode);
+  }
+}
+
+async function leaveSession(){
+  if(!isAdmin&&!roomState.finished){
+    showToast("Kamu belum bisa keluar. Tunggu Admin menekan FINISH.","error");
+    return;
+  }
+
+  stopRoomStatePolling();
+  if(roomChannel&&db){
+    await db.removeChannel(roomChannel);
+    roomChannel=null;
+  }
+  localStorage.removeItem("netshield_active_session");
+
+  if(!isAdmin&&roomCode){
+    localStorage.removeItem("netshield_player_"+roomCode);
+  }
+
+  roomCode="";
+  currentPlayerId=null;
+  isAdmin=false;
+  roomState=makeEmptyState();
+  selectedCharacter="";
+  selectedDefenseId="";
+  lastAdminEventId="";
+  $("adminSpecialToast")?.classList.remove("show");
+
+  $("roomBadge").classList.add("hidden");
+  $("roleBadge").classList.add("hidden");
+
+  setConnection(false);
+  showScreen("homeScreen");
+}
+
+/* ===================== PLAYER CHARACTER JOIN ===================== */
+function renderCharacterPicker(){
+  const area=$("characterPicker");
+  if(!area)return;
+
+  let savedSession=null;
+
+  try{
+    savedSession=roomCode
+      ?JSON.parse(localStorage.getItem("netshield_player_"+roomCode)||"null")
+      :null;
+  }catch(error){}
+
+  const ownPlayer=savedSession?.id?playerById(savedSession.id):null;
+
+  area.innerHTML=CHARACTERS.map(name=>{
+    const occupied=roomState.players.some(
+      player=>player.character===name&&player.id!==ownPlayer?.id
+    );
+
+    const skills=CHARACTER_SKILLS[name]||[];
+
+    return `<button type="button"
+      class="character-option ${selectedCharacter===name?"selected":""}"
+      ${occupied?"disabled":""}
+      onclick="selectCharacter('${name}')">
+
+      <img src="${CHARACTER_IMAGES[name]}" alt="${name}"
+        onerror="this.style.opacity='.2';this.title='Character image file not found'">
+
+      <b>${name}</b>
+      <div class="role">${CHARACTER_ROLES[name]} ${occupied?"· Sudah dipilih":"· Available"}</div>
+
+      <div class="skills">
+        <b>Character Skill</b><br>
+        Can counter: ${skills.map(escapeHtml).join(", ")}
+      </div>
+    </button>`;
+  }).join("");
+
+  $("selectedCharacterText").textContent=selectedCharacter
+    ?"Dipilih: "+selectedCharacter+" — "+CHARACTER_ROLES[selectedCharacter]
+    :"Belum ada karakter dipilih.";
+}
+
+function selectCharacter(name){
+  if(roomState.players.some(player=>player.character===name)){
+    showToast("Karakter ini sudah dipilih Player lain.","error");
+    return;
+  }
+
+  selectedCharacter=name;
+  renderCharacterPicker();
+}
+
+async function loadRoomForJoin(){
+  // Preview Room hanya membaca data. Jangan membuat channel Realtime saat input blur.
+  // Channel Realtime baru dibuat satu kali oleh joinGame setelah Player menekan JOIN.
+  $("playerRoute").disabled=false;
+  const code=$("joinRoomCode").value.trim().toUpperCase();
+  if(!/^[A-Z0-9]{6}$/.test(code))return false;
+  if(!initSupabase())return false;
+
+  try{
+    const {data,error}=await db
+      .from(TABLE_NAME)
+      .select("code,state")
+      .eq("code",code)
+      .maybeSingle();
+    if(error)throw error;
+    if(!data)throw new Error("Room tidak ditemukan. Periksa kode room dari Admin.");
+
+    // Lepas channel Room lama jika Player sedang berpindah ke Room lain.
+    if(roomChannel&&roomCode!==code){
+      const oldChannel=roomChannel;
+      roomChannel=null;
+      await db.removeChannel(oldChannel);
+    }
+
+    roomCode=code;
+    roomState=normalizeRoomState(data.state);
+    let savedSession=null;
+    try{
+      savedSession=JSON.parse(localStorage.getItem("netshield_player_"+code)||"null");
+    }catch(error){}
+
+    const existing=savedSession?.id?playerById(savedSession.id):null;
+    if(existing){
+      $("playerName").value=existing.name;
+      selectedCharacter=existing.character;
+      $("playerRoute").value=existing.route==="express"?"express":"safe";
+      $("playerRoute").disabled=true;
+    }else{
+      // Pertahankan karakter yang sudah dipilih Player ketika preview dipanggil ulang oleh JOIN.
+      if(roomState.players.some(player=>player.character===selectedCharacter))selectedCharacter="";
+      $("playerRoute").disabled=false;
+      if(!$("playerRoute").value)$("playerRoute").value="safe";
+    }
+
+    renderCharacterPicker();
+    if(roomState.finished)showToast("Room sudah selesai. Tidak menerima Player baru.","error");
+    return true;
+  }catch(error){
+    showToast(error.message||"Room belum ditemukan.","error");
+    return false;
+  }
+}
+
+async function joinGame(){
+  clearError("joinError");
+  const code=$("joinRoomCode").value.trim().toUpperCase();
+  const name=$("playerName").value.trim();
+  const selectedRoute=$("playerRoute")?.value==="express"?"express":"safe";
+  const chosenCharacter=selectedCharacter;
+  if(!code){showError("joinError","Masukkan kode room dari Admin.");return;}
+  if(!name){showError("joinError","Masukkan nama atau nickname.");return;}
+  if(name.length>24){showError("joinError","Nama maksimal 24 karakter.");return;}
+  if(!chosenCharacter){showError("joinError","Pilih salah satu karakter.");return;}
+  if(!confirm("Pastikan data sudah benar:\n\nNama: "+name+"\nKarakter: "+chosenCharacter+" — "+CHARACTER_ROLES[chosenCharacter]+"\nRute: "+(selectedRoute==="safe"?"SAFE ROUTE":"EXPRESS ROUTE")+"\n\nSetelah JOIN GAME, nama, karakter, dan rute tidak dapat diedit selama permainan. Lanjutkan?"))return;
+  if(!initSupabase())return;
+
+  try{
+    const roomPreviewLoaded=await loadRoomForJoin();
+    if(!roomPreviewLoaded)throw new Error("Room belum berhasil dimuat. Periksa Room Code dan coba lagi.");
+
+    // Preview Room dapat memperbarui daftar karakter yang tersedia. Kembalikan
+    // karakter yang sudah dikonfirmasi sebelum memproses JOIN.
+    selectedCharacter=chosenCharacter;
+    await connectRoom(code);
+
+    if(roomState.finished)throw new Error("Game sudah selesai. Kamu tidak dapat bergabung.");
+
+    const savedSession=JSON.parse(localStorage.getItem("netshield_player_"+code)||"null");
+    let player=savedSession?.id?playerById(savedSession.id):null;
+    let isNewPlayer=false;
+    let recoveredPreviousJoin=false;
+
+    // Pulihkan Player yang mungkin sudah dibuat oleh RPC pada percobaan JOIN
+    // sebelumnya, tetapi belum sempat disimpan ke localStorage karena error.
+    if(!player){
+      player=roomState.players.find(item=>
+        String(item.name||"").trim().toLowerCase()===name.toLowerCase()&&
+        item.character===chosenCharacter
+      )||null;
+      recoveredPreviousJoin=Boolean(player);
+    }
+
+    if(player){
+      if(player.name!==name||player.character!==chosenCharacter){
+        throw new Error("Browser ini sudah terdaftar dengan nama/karakter berbeda di room ini.");
+      }
+      if(player.route&&player.route!==selectedRoute){
+        $("playerRoute").value=player.route||"safe";
+        throw new Error("Rute Player ini sudah terkunci sebagai "+routeName(player)+".");
+      }
+
+      let needsSave=recoveredPreviousJoin;
+      if(!player.route){player.route=selectedRoute;needsSave=true;}
+      if(!Number.isFinite(Number(player.position))){player.position=1;needsSave=true;}
+      if(typeof player.routeFinished!=="boolean"){player.routeFinished=false;needsSave=true;}
+      if(!Number.isFinite(Number(player.finishOrder))){player.finishOrder=null;}
+      if(!Array.isArray(player.inventory)){player.inventory=[];needsSave=true;}
+
+      if(!player.initialDefenseDealt){
+        const starterCards=randomDefenseCards(3);
+        player.inventory.push(...starterCards);
+        player.initialDefenseDealt=true;
+        addLog("Player "+playerNumber(player)+" — "+player.name+" bergabung melalui "+routeName(player)+" dan menerima 3 Defense Card acak: "+starterCards.map(card=>card.name).join(", ") + ".");
+        needsSave=true;
+        isNewPlayer=true;
+      }
+
+      if(needsSave){
+        const saved=await persistOrRestore();
+        if(!saved)throw new Error("Data Player belum berhasil disimpan. Periksa koneksi database lalu coba lagi.");
+      }
+
+      localStorage.setItem("netshield_player_"+code,JSON.stringify({
+        id:player.id,name,character:chosenCharacter,route:selectedRoute
+      }));
+
+    }else{
+      if(roomState.gameStarted)throw new Error("Permainan sudah dimulai. Hanya Player yang sudah terdaftar yang dapat masuk kembali.");
+
+      const {data,error}=await db.rpc("netshield_join_player",{
+        p_code:code,
+        p_name:name,
+        p_character:chosenCharacter
+      });
+      if(error)throw error;
+
+      roomState=normalizeRoomState(data.state||roomState);
+      player=playerById(data.player?.id)||data.player;
+      if(!player)throw new Error("Data Player dari database tidak ditemukan.");
+      if(!roomState.players.some(item=>item.id===player.id))roomState.players.push(player);
+
+      player.route=selectedRoute;
+      player.position=1;
+      player.routeFinished=false;
+      player.finishOrder=null;
+      player.finishedAt=null;
+      player.diceRolledInTurn=false;
+      player.extraDiceRolls=0;
+      player.inventory=Array.isArray(player.inventory)?player.inventory:[];
+
+      if(!player.initialDefenseDealt){
+        const starterCards=randomDefenseCards(3);
+        player.inventory.push(...starterCards);
+        player.initialDefenseDealt=true;
+        addLog("Player "+playerNumber(player)+" — "+player.name+" bergabung melalui "+routeName(player)+" dan menerima 3 Defense Card acak: "+starterCards.map(card=>card.name).join(", ") + ".");
+      }
+
+      const saved=await persistOrRestore();
+      if(!saved)throw new Error("Player bergabung, tetapi data awal gagal disimpan. Coba JOIN GAME sekali lagi.");
+      localStorage.setItem("netshield_player_"+code,JSON.stringify({
+        id:player.id,name,character:chosenCharacter,route:selectedRoute
+      }));
+      isNewPlayer=true;
+    }
+
+    currentPlayerId=player.id;
+    isAdmin=false;
+    localStorage.setItem("netshield_active_session",JSON.stringify({role:"player",roomCode:code,playerId:player.id,name:player.name,character:player.character,route:player.route}));
+    selectedDefenseId="";
+    currentPlayerTab="main";
+    $("roleBadge").textContent="PLAYER "+playerNumber(player);
+    $("roleBadge").classList.remove("hidden");
+    showScreen("playerScreen");
+    renderAll();
+    showToast(isNewPlayer?"Berhasil bergabung! Kamu mendapat 3 Defense Card acak.":"Berhasil masuk kembali sebagai PLAYER "+playerNumber(player),"success");
+  }catch(error){
+    showError("joinError",error.message||"Gagal bergabung. Periksa kode room dan pilihan karakter.");
+  }
+}
+
+/* ===================== AUTOMATIC TURN MANAGEMENT ===================== */
+function orderedPlayers(){return [...(roomState.players||[])].sort((a,b)=>playerNumber(a)-playerNumber(b));}
+function createTurnId(){return crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();}
+function activateTurn(player){
+  if(!player)return;
+  roomState.currentTurnPlayerId=player.id;
+  roomState.turnId=createTurnId();
+  player.diceRolledInTurn=false;
+  player.lastDiceTurnId=null;
+  player.extraDiceRolls=Math.max(0,Number(player.extraDiceRolls)||0);
+}
+async function startGame(){
+  if(!ensureAdminActive())return;
+  if(roomState.gameStarted){showToast("Permainan sudah dimulai.","error");return;}
+  const players=orderedPlayers();
+  if(players.length<2){showToast("Minimal 2 Player harus bergabung sebelum permainan dimulai.","error");return;}
+  for(const player of players){
+    if(!player.route)player.route="safe";
+    player.position=1;
+    player.routeFinished=false;
+    player.finishOrder=null;
+    player.finishedAt=null;
+    player.diceRolledInTurn=false;
+    player.lastDiceTurnId=null;
+    player.extraDiceRolls=0;
+    // Setiap pertandingan baru dimulai dari START; jangan bawa Threat lama ke giliran pertama.
+    player.activeThreat=null;
+  }
+  roomState.lastDiceRoll=null;
+  roomState.gameStarted=true;
+  roomState.turnNumber=1;
+  roomState.finishSequence=0;
+  activateTurn(players.find(player=>!player.routeFinished));
+  addLog("GAME STARTED. Admin memulai giliran pertama untuk Player "+playerNumber(currentTurnPlayer())+" — "+currentTurnPlayer().name+".");
+  const saved=await persistOrRestore();
+  if(saved)showToast("Giliran pertama dimulai: Player "+playerNumber(currentTurnPlayer())+" — "+currentTurnPlayer().name,"success");
+}
+async function adminAdvanceTurn(){
+  if(!ensureAdminActive())return;
+  if(!roomState.gameStarted){await startGame();return;}
+  const current=currentTurnPlayer();
+  if(!current){resolveAutomaticWinner();await persistOrRestore();return;}
+  if(current.activeThreat){showToast("Threat Player "+playerNumber(current)+" harus diselesaikan dahulu. Giliran belum dapat dipindahkan.","error");return;}
+  if(!current.routeFinished){
+    const rolled=current.diceRolledInTurn&&current.lastDiceTurnId===roomState.turnId;
+    if(!rolled){showToast("Player "+playerNumber(current)+" belum melempar dadu pada giliran ini.","error");return;}
+    if(Number(current.extraDiceRolls)>0){showToast("Player masih memiliki Extra Roll yang harus digunakan dahulu.","error");return;}
+  }
+  const players=orderedPlayers();
+  const currentIndex=players.findIndex(player=>player.id===current.id);
+  let next=null;
+  for(let offset=1;offset<=players.length;offset++){
+    const candidate=players[(currentIndex+offset+players.length)%players.length];
+    if(!candidate.routeFinished){next=candidate;break;}
+  }
+  if(!next){resolveAutomaticWinner();await persistOrRestore();return;}
+  roomState.turnNumber=(Number(roomState.turnNumber)||1)+1;
+  activateTurn(next);
+  addLog("ADMIN mengakhiri giliran Player "+playerNumber(current)+" — "+current.name+" dan memulai giliran Player "+playerNumber(next)+" — "+next.name+".");
+  const saved=await persistOrRestore();
+  if(saved)showToast("Giliran sekarang: Player "+playerNumber(next)+" — "+next.name,"success");
+}
+async function adminControlTurn(){
+  if(!isAdmin){showToast("Hanya Admin yang dapat mengatur giliran.","error");return;}
+  if(!roomState.gameStarted){await startGame();return;}
+  await adminAdvanceTurn();
+}
+
+/* ===================== WEBSITE MODE DIGITAL DICE ===================== */
+function diceSymbol(value){
+  const faces={1:"⚀",2:"⚁",3:"⚂",4:"⚃",5:"⚄",6:"⚅"};
+  return faces[Number(value)]||"🎲";
+}
+
+function renderDiceResult(containerId,result){
+  const area=$(containerId);
+  if(!area)return;
+  if(!result){
+    area.dataset.rollId="";
+    area.className="dice-empty";
+    area.textContent="Belum ada Player yang melempar dadu.";
+    return;
+  }
+  if(area.dataset.rollId===String(result.id||""))return;
+  area.dataset.rollId=String(result.id||"");
+  const value=Math.max(1,Math.min(6,Number(result.value)||1));
+  area.className="dice-result";
+  area.innerHTML=`
+    <div class="dice-face rolling">${diceSymbol(value)}</div>
+    <div style="text-align:center">
+      <div class="muted" style="font-size:10px;letter-spacing:1px">DICE RESULT</div>
+      <div class="dice-number">${value}</div>
+      <div class="dice-meta">PLAYER ${Number(result.playerNumber)||"?"} · ${escapeHtml(result.playerName||"Player")}</div>
+      <div class="dice-meta">${escapeHtml(result.at||"")}</div>
+    </div>`;
+}
+
+async function rollDice(){
+  if(!currentPlayerId||roomState.finished)return;
+  if(saveInProgress){
+    showToast("Sedang menyimpan perubahan sebelumnya. Coba lagi.","error");
+    return;
+  }
+
+  // Ambil state terbaru dari Supabase sebelum memeriksa giliran.
+  // Ini menangani event START TURN yang mungkin terlewat oleh Realtime di perangkat Player.
+  try{
+    await syncRoomStateBeforePlayerAction();
+  }catch(error){
+    showToast("Tidak dapat menyinkronkan giliran: "+(error.message||"periksa koneksi internet"),"error");
+    return;
+  }
+
+  const player=playerById(currentPlayerId);
+  if(!player||roomState.finished)return;
+  if(!roomState.gameStarted){
+    showToast("Admin belum memulai giliran.","error");
+    return;
+  }
+  if(!requirePlayerTurn(player,"melempar dadu"))return;
+  if(player.routeFinished){
+    showToast("Kamu sudah mencapai Finish. Tunggu hasil permainan.","error");
+    return;
+  }
+  if(player.activeThreat){
+    showToast("Selesaikan Threat aktif terlebih dahulu sebelum melempar dadu lagi.","error");
+    return;
+  }
+  if(!roomState.turnId){
+    showToast("Admin belum memulai giliran.","error");
+    return;
+  }
+
+  const alreadyRolled=player.diceRolledInTurn&&player.lastDiceTurnId===roomState.turnId;
+  if(alreadyRolled&&Number(player.extraDiceRolls)<=0){
+    showToast("Kamu sudah melempar dadu pada giliran ini. Extra Roll diperlukan untuk lemparan tambahan.","error");
+    return;
+  }
+
+  const value=Math.floor(Math.random()*6)+1;
+  const usedExtra=alreadyRolled&&Number(player.extraDiceRolls)>0;
+  if(usedExtra)player.extraDiceRolls=Math.max(0,Number(player.extraDiceRolls)-1);
+  player.diceRolledInTurn=true;
+  player.lastDiceTurnId=roomState.turnId;
+
+  roomState.lastDiceRoll={
+    id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),
+    playerId:player.id,
+    playerName:player.name,
+    playerNumber:playerNumber(player),
+    value,
+    at:new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"}),
+    extra:usedExtra
+  };
+
+  addLog("Player "+playerNumber(player)+" — "+player.name+" melempar dadu digital dan mendapatkan "+value+(usedExtra?" (Extra Roll)":"")+".");
+
+  // Gerakkan pion dahulu, kemudian proses efek kotak tujuan secara otomatis.
+  movePlayerAlongRoute(player,value,usedExtra?"Extra Roll":"Digital Dice");
+
+  const saved=await persistOrRestore();
+  if(saved){
+    if(roomState.finished){
+      showToast("Permainan selesai! Pemenang: "+(playerById(roomState.winnerId)?.name||"Player"),"success");
+    }else if(player.activeThreat){
+      showToast("Kamu mendarat di Threat! Selesaikan kartu Threat sebelum Admin memindahkan giliran.","error");
+    }else if(player.routeFinished){
+      showToast("Kamu sudah mencapai Finish. Tunggu Player lain menyelesaikan rute.","success");
+    }else{
+      showToast("Dadu: "+value+". Kamu pindah ke kotak "+player.position+" ("+routeSquare(player,player.position).toUpperCase()+") pada "+routeName(player)+". Efek kotak diproses otomatis.","success");
+    }
+  }
+}
+
+/* ===================== ADMIN CARD CONTROL ===================== */
+/* ===================== ADMIN MANAGE PLAYER CARD CONTROL ===================== */
+async function adminGiveCard(playerId,type){
+  if(!ensureAdminActive())return;
+  if(!roomState.gameStarted){showToast("Mulai permainan terlebih dahulu sebelum membagikan kartu tambahan.","error");return;}
+  const player=playerById(playerId);
+  if(!player){showToast("Player tidak ditemukan.","error");return;}
+  if(type==="Threat"){
+    if(player.activeThreat){showToast("Player ini masih memiliki Threat aktif.","error");return;}
+    const deck=DECKS.Threat;
+    createThreatForPlayer(player,deck[Math.floor(Math.random()*deck.length)],"Admin Manage Player");
+  }else if(type==="Defense"){
+    const card=randomDefenseCards(1)[0];
+    player.inventory=Array.isArray(player.inventory)?player.inventory:[];
+    player.inventory.push(card);
+    player.latest=card;
+    addLog("Admin memberikan 1 Defense Card acak ("+card.name+") kepada Player "+playerNumber(player)+".");
+  }else if(type==="Special"){
+    const card=drawSpecialCard();
+    grantSpecialCardToPlayer(player,card,"Admin Manage Player");
+    addLog("Admin memberikan 1 Special Card ("+card.name+") kepada Player "+playerNumber(player)+".");
+  }else{
+    showToast("Jenis kartu tidak dikenal.","error");return;
+  }
+  await persistOrRestore();
+}
+
+/* ===================== PLAYER THREAT ANSWERS ===================== */
+function chooseDefense(instanceId){
+  selectedDefenseId=instanceId;
+  renderPlayer();
+}
+
+async function submitDefense(){
+  const player=playerById(currentPlayerId);
+
+  if(!player||!player.activeThreat||roomState.finished)return;
+  if(!requirePlayerTurn(player,"menangani Threat"))return;
+
+  const defenseIndex=(player.inventory||[]).findIndex(
+    card=>card.instanceId===selectedDefenseId&&card.type==="Defense"
+  );
+
+  if(defenseIndex<0){
+    showToast("Pilih salah satu Defense Card terlebih dahulu.","error");
+    return;
+  }
+
+  const threat=player.activeThreat;
+  const defense=player.inventory[defenseIndex];
+  const threatNumber=getCardNumber(threat.card,"Threat");
+  const defenseNumber=getCardNumber(defense,"Defense");
+  const allowedDefenseNumbers=THREAT_DEFENSE_PAIRS[threatNumber]||[];
+  const isCorrect=allowedDefenseNumbers.includes(defenseNumber);
+  const damage=Number(threat.damage)||0;
+
+  // Kartu Defense terpakai untuk jawaban benar maupun salah.
+  player.inventory.splice(defenseIndex,1);
+  selectedDefenseId="";
+
+  if(isCorrect){
+    player.lastThreatResult={
+      correct:true,
+      threatNumber,
+      threatName:threat.card.name,
+      defenseNumber,
+      defenseName:defense.name,
+      damage:0,
+      message:"Defense benar! Threat berhasil ditangani tanpa kehilangan Health."
+    };
+
+    addLog(
+      "AUTO CHECK: Defense #"+defenseNumber+" ("+defense.name+
+      ") BENAR untuk Threat #"+threatNumber+" ("+threat.card.name+
+      "). Tidak ada Health yang berkurang."
+    );
+  }else{
+    applyPlayerHealth(player,-damage,"Damage karena Defense salah");
+
+    player.lastThreatResult={
+      correct:false,
+      threatNumber,
+      threatName:threat.card.name,
+      defenseNumber,
+      defenseName:defense.name,
+      damage,
+      message:"Defense salah. Kartu tetap digunakan dan Health berkurang "+damage+" HP."
+    };
+
+    addLog(
+      "AUTO CHECK: Defense #"+defenseNumber+" ("+defense.name+
+      ") SALAH untuk Threat #"+threatNumber+" ("+threat.card.name+
+      "). Player "+playerNumber(player)+" kehilangan "+damage+" HP."
+    );
+  }
+
+  player.activeThreat=null;
+  const resultMessage=player.lastThreatResult.message;
+  const saved=await persistOrRestore();
+
+  if(saved){
+    showToast(resultMessage,isCorrect?"success":"error");
+  }
+}
+
+async function useCharacterSkill(){
+  const player=playerById(currentPlayerId);
+
+  if(!player||!player.activeThreat||roomState.finished)return;
+  if(!requirePlayerTurn(player,"menggunakan Character Skill"))return;
+
+  const threatName=player.activeThreat.card.name;
+
+  const matches=(CHARACTER_SKILLS[player.character]||[]).some(
+    name=>normalizeThreat(name)===normalizeThreat(threatName)
+  );
+
+  if(!matches){
+    showToast("Character Skill tidak cocok dengan Threat ini.","error");
+    return;
+  }
+
+  player.activeThreat=null;
+  selectedDefenseId="";
+
+  addLog(
+    "Player "+playerNumber(player)+
+    " menggunakan Character Skill "+player.character+
+    " untuk menangkal Threat. Skill tetap tersedia untuk Threat cocok berikutnya."
+  );
+
+  await persistOrRestore();
+
+  showToast(
+    "Character Skill berhasil! Tidak ada damage dan skill tetap bisa digunakan lagi.",
+    "success"
+  );
+}
+
+async function skipThreat(){
+  const player=playerById(currentPlayerId);
+
+  if(!player||!player.activeThreat||roomState.finished)return;
+  if(!requirePlayerTurn(player,"Skip Threat"))return;
+
+  const damage=Number(player.activeThreat.damage||0);
+
+  applyPlayerHealth(player,-damage,"Damage karena Skip Threat");
+  player.activeThreat=null;
+  selectedDefenseId="";
+
+  addLog(
+    "Player "+playerNumber(player)+
+    " memilih Skip Threat dan kehilangan "+damage+
+    " HP. Tidak ada Defense Card yang digunakan."
+  );
+
+  await persistOrRestore();
+
+  showToast(
+    "Threat di-skip. Health berkurang "+damage+" HP.",
+    "success"
+  );
+}
+
+async function useSpecial(instanceId){
+  const player=playerById(currentPlayerId);
+  if(!player||roomState.finished)return;
+  if(player.routeFinished){showToast("Kamu sudah mencapai Finish. Inventory tidak dapat digunakan lagi.","error");return;}
+  const index=(player.inventory||[]).findIndex(card=>card.instanceId===instanceId&&card.type==="Special");
+  if(index<0)return;
+  const card=player.inventory[index];
+  const healing=["heal15","heal25","heal50below50"].includes(card.effect);
+  if(!healing&&!requirePlayerTurn(player,"Special Card"))return;
+  if(card.effect==="heal15"||card.effect==="heal25"){
+    player.inventory.splice(index,1);
+    const amount=card.effect==="heal15"?15:25;
+    const result=applyPlayerHealth(player,amount,card.name);
+    addSpecialNotification(player,card,"DIGUNAKAN","Health "+result.before+" → "+result.after+" HP ( +"+result.applied+" HP aktual). Dapat digunakan di luar giliran.");
+  }else if(card.effect==="heal50below50"){
+    if(player.hp>=50){showToast("HP Recovery tetap disimpan. Kartu otomatis aktif saat Health turun di bawah 50.","error");return;}
+    const before=player.hp;
+    const recovered=activatePendingHpRecovery(player,"HP Recovery digunakan oleh Player.");
+    if(recovered)addSpecialNotification(player,card,"DIGUNAKAN","Health "+before+" → "+player.hp+" HP setelah HP Recovery aktif.");
+  }else if(card.effect==="cancelThreat"){
+    if(!player.activeThreat){showToast("Security Backup hanya dapat digunakan ketika ada Threat aktif.","error");return;}
+    const threatName=player.activeThreat.card.name;
+    player.inventory.splice(index,1);
+    player.activeThreat=null;
+    selectedDefenseId="";
+    addSpecialNotification(player,card,"DIGUNAKAN","Security Backup membatalkan Threat "+threatName+". Tidak ada damage.");
+  }else if(card.effect==="armor"){
+    showToast("Armor Defense sudah aktif permanen dan tidak dapat habis.","success");
+    return;
+  }else if(["move1","move2","move3"].includes(card.effect)){
+    if(player.activeThreat){showToast("Selesaikan Threat aktif sebelum menggunakan kartu gerak.","error");return;}
+    const spaces=Number(card.effect.replace("move",""));
+    player.inventory.splice(index,1);
+    addSpecialNotification(player,card,"DIGUNAKAN","Bergerak maju "+spaces+" kotak pada "+routeName(player)+".");
+    movePlayerAlongRoute(player,spaces,card.name);
+  }else{
+    showToast("Efek kartu ini diproses otomatis ketika kartu didapatkan.","error");
+    return;
+  }
+  const saved=await persistOrRestore();
+  if(saved)showToast(card.name+" berhasil digunakan.","success");
+}
+
+/* ===================== ADMIN HEALTH / AUTOMATIC FINISH ===================== */
+async function changeHealth(direction){
+  if(!ensureAdminActive())return;
+  const player=selectedHealthPlayer();
+  if(!player){showToast("Pilih Player terlebih dahulu.","error");return;}
+  if(player.routeFinished){showToast("Player ini sudah mencapai Finish. Health akhir sudah dikunci untuk penentuan pemenang.","error");return;}
+  const amount=Number($("healthAmount").value);
+  if(!Number.isInteger(amount)||amount<5||amount>100||amount%5!==0){showToast("Health harus kelipatan 5.","error");return;}
+  const before=player.hp;
+  player.hp=Math.max(0,Math.min(100,Number(player.hp||0)+(direction*amount)));
+  if(player.hp<50)activatePendingHpRecovery(player,"Admin mengubah Health hingga di bawah 50.");
+  addLog("Admin "+(direction<0?"mengurangi":"menambahkan")+" Health Player "+playerNumber(player)+" dari "+before+" menjadi "+player.hp+" HP.");
+  await persistOrRestore();
+}
+async function finishGame(){
+  if(!ensureAdminActive())return;
+  if(!roomState.players.length){showToast("Belum ada Player dalam room.","error");return;}
+  if(!roomState.players.every(player=>player.routeFinished)){
+    showToast("Pemenang baru ditentukan setelah semua Player mencapai Finish, kecuali ada Player yang Finish dengan 100 HP.","error");
+    return;
+  }
+  resolveAutomaticWinner();
+  await persistOrRestore();
+}
+
+async function resetGame(){
+  if(!isAdmin)return;
+
+  if(!confirm("Reset room ini? Semua Player, kartu, dan Health akan dihapus."))return;
+
+  roomState=makeEmptyState();
+  selectedDefenseId="";
+
+  await persistOrRestore();
+}
+
+/* ===================== ADMIN RENDER ===================== */
+function renderAdmin(){
+  if(!isAdmin)return;
+  $("adminRoomCodeDisplay").textContent=roomCode||"------";
+  const players=orderedPlayers();
+  $("adminStats").innerHTML=[
+    ["PLAYER TERDAFTAR",players.length],
+    ["TOTAL HEALTH",players.reduce((sum,player)=>sum+Number(player.hp||0),0)],
+    ["KARAKTER TERPILIH",players.length+"/4"],
+    ["KARTU INVENTORY",players.reduce((sum,player)=>sum+(player.inventory||[]).length,0)]
+  ].map(([label,value])=>`<div class="stat"><small>${label}</small><strong>${value}</strong></div>`).join("");
+
+  $("adminPlayers").innerHTML=players.length?players.map(player=>`
+    <div class="player-card ${isPlayerTurn(player)?'turn-active':''}">
+      <div class="player-head">
+        <b>PLAYER ${playerNumber(player)} · ${escapeHtml(player.character)}</b>
+        <span class="hp-number">${Number(player.hp)||0} HP</span>
+      </div>
+      <div class="muted" style="font-size:11px">${escapeHtml(player.name)} · ${escapeHtml(CHARACTER_ROLES[player.character]||"")}</div>
+      <div class="hp-track"><div class="hp-fill ${(player.hp||0)<=30?'low':''}" style="width:${Math.max(0,Math.min(100,player.hp||0))}%"></div></div>
+      <div class="manage-player-route"><b>${escapeHtml(routeName(player))}</b> · Kotak ${Number(player.position)||1}/${routeFinishPosition(player)} · ${(player.inventory||[]).length} kartu tersimpan</div>
+      <div class="muted" style="font-size:11px;margin-top:6px">${player.routeFinished?'FINISHED · Menunggu hasil':(player.activeThreat?'Threat aktif: '+escapeHtml(player.activeThreat.card.name):'Tidak ada Threat aktif')}</div>
+      ${playerHasArmor(player)?'<div class="permanent-tag">ARMOR DEFENSE · PERMANENT / UNLIMITED</div>':''}
+      <div class="turn-banner ${isPlayerTurn(player)?'active':''}" style="margin-top:9px;text-align:center">${isPlayerTurn(player)?'✓ GILIRAN AKTIF':(player.routeFinished?'FINISH':(roomState.gameStarted?'MENUNGGU GILIRAN':'SIAP BERMAIN'))}</div>
+      <div class="manage-player-actions">
+        <button class="danger" onclick="adminGiveCard('${escapeHtml(player.id)}','Threat')" ${!roomState.gameStarted||roomState.finished||player.activeThreat||player.routeFinished?'disabled':''}>+ THREAT</button>
+        <button class="secondary" onclick="adminGiveCard('${escapeHtml(player.id)}','Defense')" ${!roomState.gameStarted||roomState.finished||player.routeFinished?'disabled':''}>+ DEFENSE</button>
+        <button class="success" onclick="adminGiveCard('${escapeHtml(player.id)}','Special')" ${!roomState.gameStarted||roomState.finished||player.routeFinished?'disabled':''}>+ SPECIAL</button>
+      </div>
+    </div>`).join(""):'<p class="muted">Belum ada Player. Bagikan kode room kepada juri.</p>';
+
+  const healthTarget=$("healthTargetPlayer");
+  const oldHealthTarget=healthTarget.value;
+  healthTarget.innerHTML=players.map(player=>`<option value="${escapeHtml(player.id)}">Player ${playerNumber(player)} — ${escapeHtml(player.name)}</option>`).join("");
+  if(players.some(player=>player.id===oldHealthTarget))healthTarget.value=oldHealthTarget;
+
+  const activeTurn=currentTurnPlayer();
+  const turnStatus=$("adminTurnStatus");
+  const turnButton=$("adminTurnButton");
+  if(!roomState.gameStarted){
+    turnStatus.textContent="GAME BELUM DIMULAI · "+players.length+" Player bergabung. Minimal 2 Player diperlukan. Admin menekan tombol untuk memulai giliran Player pertama.";
+    turnStatus.classList.remove("active");
+    turnButton.disabled=roomState.finished||players.length<2;
+    turnButton.textContent="START FIRST TURN";
+  }else if(roomState.finished){
+    turnStatus.textContent="GAME FINISHED · Permainan telah selesai.";
+    turnStatus.classList.remove("active");
+    turnButton.disabled=true;
+    turnButton.textContent="GAME FINISHED";
+  }else if(activeTurn){
+    const status=activeTurn.routeFinished?"sudah mencapai Finish":(activeTurn.activeThreat?"harus menyelesaikan Threat terlebih dahulu":(!activeTurn.diceRolledInTurn?"belum melempar dadu":"siap menunggu Admin mengakhiri giliran"));
+    turnStatus.textContent="GILIRAN AKTIF: PLAYER "+playerNumber(activeTurn)+" — "+activeTurn.name+" · "+routeName(activeTurn)+" · Kotak "+activeTurn.position+"/"+routeFinishPosition(activeTurn)+". Player "+status+".";
+    turnStatus.classList.add("active");
+    turnButton.disabled=Boolean(activeTurn.activeThreat)||(!activeTurn.routeFinished&&(!activeTurn.diceRolledInTurn||Number(activeTurn.extraDiceRolls)>0));
+    turnButton.textContent="END TURN · NEXT PLAYER";
+  }else{
+    turnStatus.textContent="Semua Player mencapai Finish. Menghitung hasil permainan.";
+    turnStatus.classList.remove("active");
+    turnButton.disabled=true;
+    turnButton.textContent="ALL PLAYERS FINISHED";
+  }
+
+  renderDiceResult("adminDiceResult",roomState.lastDiceRoll);
+  const notifications=roomState.specialNotifications||[];
+  if(notifications.length)showAdminSpecialToast(notifications[0]);
+  $("specialNotifications").innerHTML=notifications.length?notifications.map(item=>`<div class="special-notification"><small>${escapeHtml(item.at||"")} · ${escapeHtml(item.action||"SPECIAL EVENT")}</small><b>${escapeHtml(item.message||"")}</b></div>`).join(""):'<p class="muted" style="font-size:12px">Belum ada Special Card yang didapatkan atau digunakan.</p>';
+
+  const active=[];
+  players.forEach(player=>{if(player.activeThreat)active.push({player,threat:player.activeThreat});});
+  $("pendingDefenseArea").innerHTML=active.length?active.map(item=>{
+    const player=item.player,threat=item.threat;
+    return `<div class="pending-box"><h3>PLAYER ${playerNumber(player)} · ${escapeHtml(player.name)}</h3><div class="card-display"><img src="${escapeHtml(threat.card.image)}" alt="${escapeHtml(threat.card.name)}"><div><div class="eyebrow">WAITING FOR PLAYER</div><b>THREAT #${getCardNumber(threat.card,"Threat")} · ${escapeHtml(threat.card.name)}</b><p>${escapeHtml(threat.card.description||"")}</p><div class="damage">-${Number(threat.damage)||0} HP</div></div></div><p class="muted" style="font-size:12px">Threat harus diselesaikan oleh Player sebelum Admin dapat memindahkan giliran.</p></div>`;
+  }).join(""):'<p class="muted" style="font-size:12px">Belum ada Threat aktif.</p>';
+
+  $("gameLog").innerHTML=(roomState.logs||[]).map(line=>`<div class="log-item">${escapeHtml(line)}</div>`).join("");
+  const winner=playerById(roomState.winnerId);
+  const winnerStatus=$("gameWinnerStatus");
+  if(roomState.finished&&winner){
+    winnerStatus.className="notice action-good";
+    winnerStatus.innerHTML="<b>WINNER: PLAYER "+playerNumber(winner)+" — "+escapeHtml(winner.name)+"</b><br>Health: "+winner.hp+" HP · "+escapeHtml(routeName(winner))+" · Finish order: "+winner.finishOrder;
+  }else{
+    const finishedCount=players.filter(player=>player.routeFinished).length;
+    winnerStatus.className="notice";
+    winnerStatus.textContent="Player yang sudah Finish: "+finishedCount+"/"+players.length+". Pemenang ditentukan otomatis dari Health terbanyak setelah semua Player Finish. Player dengan 100 HP saat mencapai Finish langsung menang. Jika Health sama, yang lebih dulu Finish menang.";
+  }
+
+  const finished=roomState.finished;
+  ["healthTargetPlayer","healthAmount"].forEach(id=>{if($(id))$(id).disabled=finished||!players.length;});
+  $("adminScreen").querySelectorAll("button").forEach(button=>{
+    const allowed=["LOG OUT","COPY CODE"].includes(button.textContent.trim());
+    if(!allowed&&button.id!=="adminTurnButton")button.disabled=finished;
+  });
+  if(finished){turnButton.disabled=true;}
+  const banner=$("adminFinishedBanner");
+  if(finished&&winner){
+    banner.classList.remove("hidden");
+    banner.innerHTML=`<h2>GAME FINISHED</h2><p>Pemenang: <b>Player ${playerNumber(winner)} — ${escapeHtml(winner.name)}</b></p><p>Health: <b>${winner.hp} HP</b></p>`;
+  }else banner.classList.add("hidden");
+}
+
+/* ===================== PLAYER RENDER ===================== */
+function renderPlayer(){
+  const player=playerById(currentPlayerId);
+  if(!player)return;
+
+  const number=playerNumber(player);
+
+  $("playerTitle").textContent=
+    "PLAYER "+number+" · "+String(player.name).toUpperCase();
+
+  $("playerRoleLine").textContent=
+    "ROOM "+roomCode+" · "+(CHARACTER_ROLES[player.character]||"");
+
+  $("playerCharacter").textContent=
+    player.character+" · "+(CHARACTER_ROLES[player.character]||"");
+
+  $("playerHp").textContent=(Number(player.hp)||0)+" / 100";
+
+  const fill=$("playerHpFill");
+  fill.style.width=Math.max(0,Math.min(100,Number(player.hp)||0))+"%";
+  fill.classList.toggle("low",(Number(player.hp)||0)<=30);
+
+  $("playerExitButton").disabled=!roomState.finished;
+  $("playerExitButton").textContent=roomState.finished
+    ?"EXIT GAME"
+    :"EXIT (WAIT FOR ADMIN FINISH)";
+
+  const finishBanner=$("playerFinishBanner");
+
+  if(roomState.finished){
+    const winnerPlayer=playerById(roomState.winnerId);
+
+    finishBanner.classList.remove("hidden");
+    finishBanner.innerHTML=`
+      <h2>GAME FINISHED</h2>
+      <p>${
+        winnerPlayer&&winnerPlayer.id===player.id
+          ?'Congratulations! Kamu adalah pemenangnya.'
+          :'Pemenang: '+(winnerPlayer
+            ?'Player '+playerNumber(winnerPlayer)+' — '+escapeHtml(winnerPlayer.name)
+            :'Belum ditentukan')
+      }</p>
+      <p>Admin telah mengakhiri permainan. Kamu sekarang boleh keluar.</p>
+    `;
+  }else{
+    finishBanner.classList.add("hidden");
+  }
+
+  const myTurn=isPlayerTurn(player);
+  renderDiceResult("playerDiceResult",roomState.lastDiceRoll);
+  const alreadyRolled=player.diceRolledInTurn&&player.lastDiceTurnId===roomState.turnId;
+  const hasExtra=Number(player.extraDiceRolls)>0;
+  const rollButton=$("rollDiceButton");
+  if(rollButton){
+    rollButton.disabled=!roomState.gameStarted||!myTurn||roomState.finished||player.routeFinished||Boolean(player.activeThreat)||!roomState.turnId||(alreadyRolled&&!hasExtra);
+    rollButton.textContent=alreadyRolled&&hasExtra?"ROLL EXTRA DICE":(alreadyRolled?"DICE ALREADY ROLLED":"ROLL DICE");
+  }
+  const activeTurn=currentTurnPlayer();
+  const turnBanner=$("playerTurnStatus");
+  if(!roomState.gameStarted){
+    turnBanner.textContent="Menunggu Admin memulai permainan. Setelah dimulai, giliran Player akan berjalan sesuai kontrol Admin.";
+    turnBanner.classList.remove("active");
+  }else if(player.routeFinished){
+    turnBanner.textContent="KAMU SUDAH FINISH! Tunggu Player lain menyelesaikan rute. Pemenang akan dihitung otomatis.";
+    turnBanner.classList.add("active");
+  }else if(myTurn){
+    turnBanner.textContent=player.activeThreat?"GILIRAN KAMU! Selesaikan Threat ini terlebih dahulu. Admin tidak dapat memindahkan giliran sebelum Threat selesai.":(alreadyRolled&&!hasExtra?"Dadu sudah dilempar. Setelah menyelesaikan efek kotak, tunggu Admin menekan GILIRAN BERIKUTNYA.":"GILIRAN KAMU! Lempar dadu dan pindahkan pion sesuai hasil. Setelah itu tunggu Admin memindahkan giliran.");
+    turnBanner.classList.add("active");
+  }else{
+    turnBanner.textContent=activeTurn
+      ?"Menunggu giliran Player "+playerNumber(activeTurn)+" — "+activeTurn.name+". Admin akan memindahkan giliran setelah aksi selesai."
+      :"Menunggu giliran berikutnya.";
+    turnBanner.classList.remove("active");
+  }
+  const routeStatus=$("playerRouteStatus");
+  if(routeStatus){
+    const finish=routeFinishPosition(player);
+    const square=routeSquare(player,player.position);
+    routeStatus.innerHTML="<b>"+escapeHtml(routeName(player))+"</b> · Kotak <b>"+player.position+"/"+finish+"</b> · Posisi saat ini: "+escapeHtml(square.toUpperCase())+(player.routeFinished?" · <b>FINISHED</b>":"");
+  }
+
+  $("playerInventory").innerHTML=(player.inventory||[]).length
+    ?(player.inventory||[]).map(card=>{
+      const isSpecial=card.type==="Special";
+      let action="";
+      const canUseSpecial=myTurn||["heal15","heal25","heal50below50"].includes(card.effect);
+
+      if(isSpecial&&["heal15","heal25"].includes(card.effect)){
+        const hp=card.effect==="heal15"?15:25;
+        action=`<button class="success" onclick="useSpecial('${card.instanceId}')" ${roomState.finished?'disabled':''}>USE · +${hp} HP</button>`;
+      }else if(isSpecial&&card.effect==="heal50below50"){
+        action='<span class="permanent-tag">AUTO · +50 HP WHEN BELOW 50</span>';
+      }else if(isSpecial&&card.effect==="armor"){
+        action='<span class="permanent-tag">PASSIVE · UNLIMITED USE</span>';
+      }else if(isSpecial&&card.effect==="cancelThreat"){
+        action=`<button class="success" onclick="useSpecial('${card.instanceId}')" ${!player.activeThreat||!myTurn||roomState.finished?'disabled':''}>USE · CANCEL ACTIVE THREAT</button>`;
+      }else if(isSpecial&&["move1","move2","move3"].includes(card.effect)){
+        const spaces=Number(card.effect.replace("move",""));
+        action=`<button class="secondary" onclick="useSpecial('${card.instanceId}')" ${!canUseSpecial||roomState.finished?'disabled':''}>USE · MOVE ${spaces} SPACE${spaces>1?'S':''}</button>`;
+      }
+
+      return `
+        <div class="inventory-item ${isSpecial?'special':''}">
+          <img src="${escapeHtml(card.image||"")}" alt="${escapeHtml(card.name)}">
+          <div>
+            <b>${escapeHtml(card.name)} · ${escapeHtml(card.type)}</b>
+            <p>${escapeHtml(card.description||"")}</p>
+            ${action}
+          </div>
+        </div>
+      `;
+    }).join("")
+    :'<span class="muted" style="font-size:12px">Inventory masih kosong.</span>';
+
+  const threat=player.activeThreat;
+
+  if(roomState.finished){
+    $("playerThreatArea").innerHTML=
+      '<p class="muted">Permainan sudah selesai. Tidak ada aksi baru yang dapat dilakukan.</p>';
+
+  }else if(threat){
+    const canUseSkill=(CHARACTER_SKILLS[player.character]||[]).some(
+      name=>normalizeThreat(name)===normalizeThreat(threat.card.name)
+    );
+
+    const defenses=(player.inventory||[]).filter(card=>card.type==="Defense");
+    const securityBackups=(player.inventory||[]).filter(card=>card.type==="Special"&&card.effect==="cancelThreat");
+
+    const choices=defenses.map(card=>`
+      <button type="button"
+        class="${selectedDefenseId===card.instanceId?'selected':''}"
+        onclick="chooseDefense('${card.instanceId}')">
+        <img src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}">
+        <span>
+          <strong>DEFENSE #${getCardNumber(card,"Defense")} · ${escapeHtml(card.name)}</strong>
+          <small>${escapeHtml(card.description||"")}</small>
+        </span>
+      </button>
+    `).join("")+securityBackups.map(card=>`
+      <button type="button" class="${myTurn?'':'turn-waiting'}" onclick="useSpecial('${card.instanceId}')" ${myTurn&&!roomState.finished?'':'disabled'}>
+        <img src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}">
+        <span><strong>SPECIAL · SECURITY BACKUP</strong><small>Cancel Threat apa pun tanpa damage. Hanya saat giliranmu.</small></span>
+      </button>
+    `).join("");
+
+    $("playerThreatArea").innerHTML=`
+      <div class="card-display">
+        <img src="${escapeHtml(threat.card.image)}" alt="${escapeHtml(threat.card.name)}">
+        <div>
+          <div class="eyebrow">THREAT DETECTED · #${getCardNumber(threat.card,"Threat")}</div>
+          <h3>${escapeHtml(threat.card.name)}</h3>
+          <p>${escapeHtml(threat.card.description||"")}</p>
+          <div class="damage">-${Number(threat.damage)||0} HP</div>
+        </div>
+      </div>
+
+      <label>Pilih Defense Card yang menurutmu tepat. Website akan memeriksa nomor kartunya secara otomatis. Security Backup juga muncul sebagai pilihan pembatal Threat.</label>
+
+      ${myTurn
+        ?(defenses.length||securityBackups.length
+          ?`<div class="defense-choice">${choices}</div>
+            <button class="primary" style="width:100%;margin-top:10px"
+              onclick="submitDefense()"
+              ${selectedDefenseId&&defenses.some(card=>card.instanceId===selectedDefenseId)?'':'disabled'}>
+              CHECK DEFENSE
+            </button>`
+          :'<p class="muted" style="font-size:12px">Kamu tidak memiliki Defense Card atau Security Backup. Gunakan Character Skill jika cocok, atau Skip.</p>')
+        :'<div class="turn-banner">Threat menunggu giliranmu. Kamu belum dapat menjawab karena bukan giliranmu.</div>'}
+
+      <div class="action-buttons">
+        <button class="danger" onclick="skipThreat()" ${myTurn?'':'disabled'}>SKIP THREAT · TAKE DAMAGE</button>
+      </div>
+
+      ${canUseSkill
+        ?`<button class="success" style="width:100%;margin-top:10px" onclick="useCharacterSkill()" ${myTurn?'':'disabled'}>USE CHARACTER SKILL · COUNTER THREAT</button>`
+        :''}
+    `;
+
+  }else if(player.lastThreatResult){
+    const result=player.lastThreatResult;
+    $("playerThreatArea").innerHTML=`
+      <div class="notice ${result.correct?'action-good':'action-bad'}">
+        <b>${result.correct?'DEFENSE CORRECT':'DEFENSE INCORRECT'}</b>
+        <p style="margin:8px 0 0">Threat #${Number(result.threatNumber)||'-'} · ${escapeHtml(result.threatName||"")}</p>
+        <p style="margin:5px 0">Defense #${Number(result.defenseNumber)||'-'} · ${escapeHtml(result.defenseName||"")}</p>
+        <p style="margin:5px 0 0">${escapeHtml(result.message||"")}</p>
+      </div>
+      <p class="muted" style="font-size:12px">Belum ada Threat aktif. Tunggu Admin membagikan kartu berikutnya.</p>
+    `;
+  }else{
+    $("playerThreatArea").innerHTML=
+      '<p class="muted">Belum ada Threat aktif. Tunggu Admin membagikan kartu.</p>';
+  }
+
+  $("playerGameLog").innerHTML=(roomState.logs||[]).length
+    ?(roomState.logs||[]).map(line=>`<div class="log-item">${escapeHtml(line)}</div>`).join("")
+    :'<p class="muted" style="font-size:12px">Belum ada catatan permainan.</p>';
+
+  const latest=player.latest||null;
+
+  $("latestCard").innerHTML=latest
+    ?`<div class="card-display">
+        <img src="${escapeHtml(latest.image||"")}" alt="${escapeHtml(latest.name||"")}">
+        <div>
+          <div class="eyebrow">${escapeHtml(latest.type||"CARD")} CARD</div>
+          <h3>${escapeHtml(latest.name||"")}</h3>
+          <p>${escapeHtml(latest.description||"")}</p>
+        </div>
+      </div>`
+    :'<p class="muted">Belum ada kartu.</p>';
+
+  showPlayerTab(currentPlayerTab);
+}
+
+function renderAll(){
+  if(isAdmin)renderAdmin();
+  if(currentPlayerId)renderPlayer();
+  if($("joinScreen").classList.contains("active"))renderCharacterPicker();
+}
+
+/* ===================== CARD GALLERY ===================== */
+function renderCardGallery(category="All"){
+  if($("cardsScreen")?.classList.contains("active")){
+    updateBrowserRoute("cardsScreen",{replace:true,category});
+  }
+  $("cardFilters").innerHTML=["All","Threat","Defense","Special"].map(type=>`
+    <button class="filter-btn ${type===category?'active':''}"
+      onclick="renderCardGallery('${type}')">
+      ${type==="All"?"All Cards":type+" Cards"}
+    </button>
+  `).join("");
+
+  const cards=[];
+
+  Object.entries(DECKS).forEach(([type,list])=>{
+    if(category==="All"||category===type){
+      list.forEach(card=>cards.push({...card,type}));
+    }
+  });
+
+  $("cardGallery").innerHTML=cards.map(card=>`
+    <article class="gallery-card">
+      <img src="${escapeHtml(card.image)}"
+        alt="${escapeHtml(card.name)}"
+        loading="lazy"
+        onerror="this.style.opacity='.15';this.title='Image file path not found'">
+      <h3>${escapeHtml(card.name)}</h3>
+      <p>${card.type} Card</p>
+    </article>
+  `).join("");
+}
+
+function renderCharacters(){
+  const makeProfile=name=>`
+    <article class="gallery-card">
+      <img class="character-art"
+        src="${CHARACTER_IMAGES[name]}"
+        alt="${name}"
+        onerror="this.style.opacity='.2'">
+      <h3>${name} — ${CHARACTER_ROLES[name]}</h3>
+      <p><b>Character Skill</b> · Reusable on matching Threat</p>
+      <ul class="skill-list">
+        ${(CHARACTER_SKILLS[name]||[]).map(threat=>
+          `<li>Can counter: ${escapeHtml(threat)}</li>`
+        ).join("")}
+      </ul>
+    </article>
+  `;
+
+  $("characterGallery").innerHTML=CHARACTERS.map(makeProfile).join("");
+
+  $("homeCharacters").innerHTML=CHARACTERS.map(name=>`
+    <article class="card character">
+      <img class="character-art"
+        src="${CHARACTER_IMAGES[name]}"
+        alt="${name}"
+        onerror="this.style.opacity='.2'">
+      <div>
+        <div class="char-name">${name.toUpperCase()}</div>
+        <div class="char-role">${CHARACTER_ROLES[name]}</div>
+      </div>
+      <ul class="skill-list">
+        ${(CHARACTER_SKILLS[name]||[]).map(threat=>
+          `<li>${escapeHtml(threat)}</li>`
+        ).join("")}
+      </ul>
+    </article>
+  `).join("");
+}
+
+/* ===================== IMAGE ASSET DIAGNOSTICS ===================== */
+function netshieldImageFallback(img){
+  if(!img||img.dataset.fallbackDone==="1")return;
+  img.dataset.fallbackDone="1";
+  const path=img.getAttribute("src")||"(path tidak diketahui)";
+  const label=img.getAttribute("alt")||"IMAGE NOT FOUND";
+  const box=document.createElement("div");
+  box.className=(img.className?img.className+" ":"")+"image-missing-box";
+  box.setAttribute("role","img");
+  box.setAttribute("aria-label",label+" tidak ditemukan");
+  box.innerHTML=`<strong>IMAGE NOT FOUND</strong><small>${escapeHtml(path)}</small>`;
+  img.replaceWith(box);
+}
+
+// Menangani semua gambar yang gagal dimuat dan menampilkan path persisnya.
+document.addEventListener("error",event=>{
+  const target=event.target;
+  if(target&&target.tagName==="IMG")netshieldImageFallback(target);
+},true);
+
+/* ===================== RESTORE SESSION + INITIALIZE ROUTES ===================== */
+function readActiveSession(){
+  try{
+    return JSON.parse(localStorage.getItem("netshield_active_session")||"null");
+  }catch(error){
+    return null;
+  }
+}
+
+async function restorePlayerAfterRefresh(session){
+  if(!session?.roomCode)return false;
+  await connectRoom(session.roomCode);
+
+  let player=session.playerId?playerById(session.playerId):null;
+  if(!player&&session.name){
+    player=roomState.players.find(item=>
+      String(item.name||"").trim().toLowerCase()===String(session.name).trim().toLowerCase()&&
+      (!session.character||item.character===session.character)
+    )||null;
+  }
+  if(!player)return false;
+
+  currentPlayerId=player.id;
+  isAdmin=false;
+  selectedDefenseId="";
+  const savedTab=localStorage.getItem("netshield_player_tab")||"main";
+  currentPlayerTab=["main","inventory","log"].includes(savedTab)?savedTab:"main";
+  $("roleBadge").textContent="PLAYER "+playerNumber(player);
+  $("roleBadge").classList.remove("hidden");
+  showScreen("playerScreen",{updateUrl:false});
+  renderAll();
+  return true;
+}
+
+async function restoreAdminAfterRefresh(session){
+  if(!session?.roomCode)return false;
+  isAdmin=true;
+  currentPlayerId=null;
+  await connectRoom(session.roomCode);
+  $("roleBadge").textContent="ADMIN MODE";
+  $("roleBadge").classList.remove("hidden");
+  $("adminRoomCodeDisplay").textContent=roomCode;
+  showScreen("adminScreen",{updateUrl:false});
+  renderAll();
+  return true;
+}
+
+async function initializeApp(){
+  renderCharacters();
+  renderCardGallery("All");
+  renderCharacterPicker();
+  setConnection(false);
+
+  if(!initSupabase()){
+    applyRouteFromLocation();
+    return;
+  }
+
+  const requestedScreen=screenFromCurrentUrl();
+  const activeSession=readActiveSession();
+
+  if(requestedScreen==="playerScreen"){
+    try{
+      const restored=activeSession?.role==="player"
+        ?await restorePlayerAfterRefresh(activeSession)
+        :false;
+      if(restored)return;
+    }catch(error){
+      console.warn("Player session restore failed:",error);
+    }
+    showScreen("joinScreen",{replace:true});
+    showToast("Sesi Player tidak ditemukan. Masukkan Room Code untuk bergabung kembali.","error");
+    return;
+  }
+
+  if(requestedScreen==="adminScreen"){
+    try{
+      const restored=activeSession?.role==="admin"
+        ?await restoreAdminAfterRefresh(activeSession)
+        :false;
+      if(restored)return;
+    }catch(error){
+      console.warn("Admin session restore failed:",error);
+    }
+    showScreen("adminLoginScreen",{replace:true});
+    showToast("Sesi Admin tidak ditemukan. Silakan login kembali.","error");
+    return;
+  }
+
+  applyRouteFromLocation();
+}
+
+initializeApp();
+
+</script>
+</body>
+</html>
