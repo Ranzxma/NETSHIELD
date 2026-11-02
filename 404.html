@@ -105,6 +105,26 @@ button:disabled { opacity:.45; cursor:not-allowed; }
 
 .dropdown.open .dropdown-menu { display:block; }
 
+/* MOBILE CARDS MENU PORTAL: escapes the horizontally scrolling nav clipping area */
+.cards-menu-portal{
+  display:none;
+  position:fixed!important;
+  z-index:99999!important;
+  min-width:190px;
+  max-width:calc(100vw - 16px);
+  max-height:calc(100dvh - 24px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  background:#0c1728;
+  border:1px solid #315071;
+  border-radius:12px;
+  box-shadow:0 16px 42px #000b;
+}
+.cards-menu-portal.is-open{display:block!important}
+
+
 .dropdown-menu button {
   display:block;
   width:100%;
@@ -990,10 +1010,26 @@ footer {
   #playerScreen.active>.player-tabs{order:2;flex:0 0 auto}
   #playerScreen.active>.player-tab-content{order:3;flex:1 1 auto;min-height:0}
 }
+
+
+/* V15 PHONE POLISH: reduce unwanted vertical gaps and keep navigation usable */
+@media(max-width:600px){
+  body:has(#playerScreen.active)>main>.statusbar{display:none!important}
+  #playerScreen.active{gap:2px!important}
+  #playerScreen.active>.row{margin:0!important}
+  #playerScreen.active>.player-identity-health-bar{margin:1px 0 2px!important;padding:6px 9px!important}
+  #playerScreen.active>.player-tabs{margin:0 0 2px!important}
+  #playerScreen.active>.player-tab-content{margin-top:0!important}
+  .section-title{margin:18px 0 10px}
+  .gallery-grid{gap:9px}
+  .gallery-tools{gap:6px;margin:12px 0}
+  .gallery-card{padding:9px}
+}
+
 </style>
 
 <!-- Supabase JavaScript Client -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 </head>
 
 <body>
@@ -1011,7 +1047,7 @@ footer {
     <button class="nav-link active" onclick="showScreen('homeScreen')">Homepage</button>
 
     <div class="dropdown" id="cardsDropdown">
-      <button class="nav-link" onclick="toggleCardsMenu(event)">Cards ▾</button>
+      <button class="nav-link" onclick="toggleCardsMenu(event)" aria-haspopup="true" aria-expanded="false">Cards ▾</button>
       <div class="dropdown-menu">
         <button onclick="openCardGallery('All')">All Cards</button>
         <button onclick="openCardGallery('Threat')">Threat Cards</button>
@@ -1046,15 +1082,15 @@ footer {
     <div class="section-title"><h2>EXPLORE THE CARDS</h2><span class="muted">Threat · Defense · Special</span></div>
     <div class="grid home-card-grid">
       <div class="card home-card-preview" onclick="openCardGallery('Threat')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCardGallery('Threat')}">
-        <img src="back cover threat.png" alt="Threat Card Back Cover" onerror="this.style.opacity='.2';this.alt='Threat card cover image not found'">
+        <img src="back cover threat.png" alt="Threat Card Back Cover" loading="lazy" decoding="async" onerror="this.style.opacity='.2';this.alt='Threat card cover image not found'">
         <h3>THREAT CARDS</h3><p class="muted">Kenali berbagai ancaman digital.</p>
       </div>
       <div class="card home-card-preview" onclick="openCardGallery('Defense')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCardGallery('Defense')}">
-        <img src="back cover defense.png" alt="Defense Card Back Cover" onerror="this.style.opacity='.2';this.alt='Defense card cover image not found'">
+        <img src="back cover defense.png" alt="Defense Card Back Cover" loading="lazy" decoding="async" onerror="this.style.opacity='.2';this.alt='Defense card cover image not found'">
         <h3>DEFENSE CARDS</h3><p class="muted">Pelajari cara menghadapi ancaman.</p>
       </div>
       <div class="card home-card-preview" onclick="openCardGallery('Special')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCardGallery('Special')}">
-        <img src="back cover special.png" alt="Special Card Back Cover" onerror="this.style.opacity='.2';this.alt='Special card cover image not found'">
+        <img src="back cover special.png" alt="Special Card Back Cover" loading="lazy" decoding="async" onerror="this.style.opacity='.2';this.alt='Special card cover image not found'">
         <h3>SPECIAL CARDS</h3><p class="muted">Gunakan efek khusus dalam permainan.</p>
       </div>
     </div>
@@ -1108,7 +1144,7 @@ footer {
         <p class="muted" style="font-size:12px">Pastikan kamera dapat melihat seluruh QR Code dengan jelas.</p>
       </div>
       <div class="guidebook-qr-wrap">
-        <img class="guidebook-qr" src="guidebook-qrcode.png" alt="QR Code untuk membuka NETSHIELD Full Guidebook di Canva">
+        <img class="guidebook-qr" src="guidebook-qrcode.png" loading="lazy" decoding="async" alt="QR Code untuk membuka NETSHIELD Full Guidebook di Canva">
       </div>
     </div>
   </section>
@@ -2108,20 +2144,89 @@ window.addEventListener("popstate",()=>{
   applyRouteFromLocation();
 });
 
+function getCardsMenuElement(){
+  return document.querySelector("#cardsDropdown .dropdown-menu")
+    ||document.querySelector("body > .cards-menu-portal");
+}
+
+function restoreCardsMenuInline(){
+  const dropdown=$("cardsDropdown");
+  const menu=getCardsMenuElement();
+  if(!dropdown||!menu)return;
+  if(menu.parentElement!==dropdown)dropdown.appendChild(menu);
+  menu.classList.remove("cards-menu-portal","is-open");
+  menu.style.removeProperty("position");
+  menu.style.removeProperty("left");
+  menu.style.removeProperty("top");
+  menu.style.removeProperty("width");
+  menu.style.removeProperty("max-height");
+  dropdown.classList.remove("open");
+}
+
+function closeCardsMenu(){
+  const dropdown=$("cardsDropdown");
+  const menu=getCardsMenuElement();
+  dropdown?.classList.remove("open");
+  menu?.classList.remove("is-open");
+  const trigger=dropdown?.querySelector("button.nav-link");
+  trigger?.setAttribute("aria-expanded","false");
+}
+
 function toggleCardsMenu(event){
   event.stopPropagation();
-  $("cardsDropdown").classList.toggle("open");
+  const dropdown=$("cardsDropdown");
+  const menu=getCardsMenuElement();
+  const trigger=event.currentTarget||dropdown?.querySelector("button.nav-link");
+  if(!dropdown||!menu||!trigger)return;
+
+  if(window.matchMedia("(max-width: 700px)").matches){
+    dropdown.classList.remove("open");
+    if(menu.parentElement!==document.body)document.body.appendChild(menu);
+    menu.classList.add("cards-menu-portal");
+    const isOpening=!menu.classList.contains("is-open");
+    if(!isOpening){
+      closeCardsMenu();
+      return;
+    }
+    menu.classList.add("is-open");
+    const anchor=trigger.getBoundingClientRect();
+    const menuWidth=Math.min(230,window.innerWidth-16);
+    menu.style.width=menuWidth+"px";
+    menu.style.left=Math.max(8,Math.min(anchor.left,window.innerWidth-menuWidth-8))+"px";
+    menu.style.maxHeight=Math.max(120,window.innerHeight-24)+"px";
+    const menuHeight=Math.min(menu.scrollHeight,window.innerHeight-24);
+    let top=anchor.bottom+6;
+    if(top+menuHeight>window.innerHeight-8)top=Math.max(8,anchor.top-menuHeight-6);
+    menu.style.top=top+"px";
+    trigger.setAttribute("aria-expanded","true");
+  }else{
+    if(menu.classList.contains("cards-menu-portal"))restoreCardsMenuInline();
+    const opening=!dropdown.classList.contains("open");
+    dropdown.classList.toggle("open",opening);
+    trigger.setAttribute("aria-expanded",String(opening));
+  }
 }
 
 function openCardGallery(category){
-  $("cardsDropdown").classList.remove("open");
+  closeCardsMenu();
   showScreen("cardsScreen",{category});
   renderCardGallery(category);
 }
 
 document.addEventListener("click",event=>{
-  if(!event.target.closest(".dropdown")){
-    $("cardsDropdown")?.classList.remove("open");
+  if(!event.target.closest(".dropdown")&&!event.target.closest(".cards-menu-portal")){
+    closeCardsMenu();
+  }
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closeCardsMenu();
+});
+
+window.addEventListener("resize",()=>{
+  closeCardsMenu();
+  if(!window.matchMedia("(max-width: 700px)").matches){
+    restoreCardsMenuInline();
   }
 });
 
@@ -2482,7 +2587,7 @@ function renderCharacterPicker(){
       ${occupied?"disabled":""}
       onclick="selectCharacter('${name}')">
 
-      <img src="${CHARACTER_IMAGES[name]}" alt="${name}"
+      <img src="${CHARACTER_IMAGES[name]}" alt="${name}" loading="lazy" decoding="async"
         onerror="this.style.opacity='.2';this.title='Character image file not found'">
 
       <b>${name}</b>
@@ -3197,7 +3302,7 @@ function renderAdmin(){
   players.forEach(player=>{if(player.activeThreat)active.push({player,threat:player.activeThreat});});
   $("pendingDefenseArea").innerHTML=active.length?active.map(item=>{
     const player=item.player,threat=item.threat;
-    return `<div class="pending-box"><h3>PLAYER ${playerNumber(player)} · ${escapeHtml(player.name)}</h3><div class="card-display"><img src="${escapeHtml(threat.card.image)}" alt="${escapeHtml(threat.card.name)}"><div><div class="eyebrow">WAITING FOR PLAYER</div><b>THREAT #${getCardNumber(threat.card,"Threat")} · ${escapeHtml(threat.card.name)}</b><p>${escapeHtml(threat.card.description||"")}</p><div class="damage">-${Number(threat.damage)||0} HP</div></div></div><p class="muted" style="font-size:12px">Threat harus diselesaikan oleh Player sebelum Admin dapat memindahkan giliran.</p></div>`;
+    return `<div class="pending-box"><h3>PLAYER ${playerNumber(player)} · ${escapeHtml(player.name)}</h3><div class="card-display"><img src="${escapeHtml(threat.card.image)}" alt="${escapeHtml(threat.card.name)}" loading="lazy" decoding="async"><div><div class="eyebrow">WAITING FOR PLAYER</div><b>THREAT #${getCardNumber(threat.card,"Threat")} · ${escapeHtml(threat.card.name)}</b><p>${escapeHtml(threat.card.description||"")}</p><div class="damage">-${Number(threat.damage)||0} HP</div></div></div><p class="muted" style="font-size:12px">Threat harus diselesaikan oleh Player sebelum Admin dapat memindahkan giliran.</p></div>`;
   }).join(""):'<p class="muted" style="font-size:12px">Belum ada Threat aktif.</p>';
 
   $("gameLog").innerHTML=(roomState.logs||[]).map(line=>`<div class="log-item">${escapeHtml(line)}</div>`).join("");
@@ -3269,7 +3374,7 @@ function renderPlayerInventory(player){
 
       return `
         <div class="inventory-item ${isSpecial?'special':''}">
-          <img src="${escapeHtml(card.image||"")}" alt="${escapeHtml(card.name)}">
+          <img src="${escapeHtml(card.image||"")}" alt="${escapeHtml(card.name)}" loading="lazy" decoding="async">
           <div>
             <b>${escapeHtml(card.name)} · ${escapeHtml(card.type)}</b>
             <p>${escapeHtml(card.description||"")}</p>
@@ -3381,7 +3486,7 @@ function renderPlayer(){
       <button type="button"
         class="${selectedDefenseId===card.instanceId?'selected':''}"
         onclick="chooseDefense('${card.instanceId}')">
-        <img src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}">
+        <img src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}" loading="lazy" decoding="async">
         <span>
           <strong>DEFENSE #${getCardNumber(card,"Defense")} · ${escapeHtml(card.name)}</strong>
           <small>${escapeHtml(card.description||"")}</small>
@@ -3389,14 +3494,14 @@ function renderPlayer(){
       </button>
     `).join("")+securityBackups.map(card=>`
       <button type="button" class="${myTurn?'':'turn-waiting'}" onclick="useSpecial('${card.instanceId}')" ${myTurn&&!roomState.finished?'':'disabled'}>
-        <img src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}">
+        <img src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}" loading="lazy" decoding="async">
         <span><strong>SPECIAL · SECURITY BACKUP</strong><small>Cancel Threat apa pun tanpa damage. Hanya saat giliranmu.</small></span>
       </button>
     `).join("");
 
     $("playerThreatArea").innerHTML=`
       <div class="card-display">
-        <img src="${escapeHtml(threat.card.image)}" alt="${escapeHtml(threat.card.name)}">
+        <img src="${escapeHtml(threat.card.image)}" alt="${escapeHtml(threat.card.name)}" loading="lazy" decoding="async">
         <div>
           <div class="eyebrow">THREAT DETECTED · #${getCardNumber(threat.card,"Threat")}</div>
           <h3>${escapeHtml(threat.card.name)}</h3>
@@ -3474,7 +3579,7 @@ function renderPlayer(){
 
   $("latestCard").innerHTML=latest
     ?`<div class="card-display">
-        <img src="${escapeHtml(latest.image||"")}" alt="${escapeHtml(latest.name||"")}">
+        <img src="${escapeHtml(latest.image||"")}" alt="${escapeHtml(latest.name||"")}" loading="lazy" decoding="async">
         <div>
           <div class="eyebrow">${escapeHtml(latest.type||"CARD")} CARD</div>
           <h3>${escapeHtml(latest.name||"")}</h3>
@@ -3516,7 +3621,7 @@ function renderCardGallery(category="All"){
     <article class="gallery-card">
       <img src="${escapeHtml(card.image)}"
         alt="${escapeHtml(card.name)}"
-        loading="lazy"
+        loading="lazy" decoding="async"
         onerror="this.style.opacity='.15';this.title='Image file path not found'">
       <h3>${escapeHtml(card.name)}</h3>
       <p>${card.type} Card</p>
@@ -3529,7 +3634,7 @@ function renderCharacters(){
     <article class="gallery-card">
       <img class="character-art"
         src="${CHARACTER_IMAGES[name]}"
-        alt="${name}"
+        alt="${name}" loading="lazy" decoding="async"
         onerror="this.style.opacity='.2'">
       <h3>${name} — ${CHARACTER_ROLES[name]}</h3>
       <p><b>Character Skill</b> · Reusable on matching Threat</p>
@@ -3547,7 +3652,7 @@ function renderCharacters(){
     <article class="card character">
       <img class="character-art"
         src="${CHARACTER_IMAGES[name]}"
-        alt="${name}"
+        alt="${name}" loading="lazy" decoding="async"
         onerror="this.style.opacity='.2'">
       <div>
         <div class="char-name">${name.toUpperCase()}</div>
@@ -3674,7 +3779,11 @@ async function initializeApp(){
   applyRouteFromLocation();
 }
 
-initializeApp();
+if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",initializeApp,{once:true});
+}else{
+  initializeApp();
+}
 
 </script>
 </body>
